@@ -1,10 +1,11 @@
-# Tempi Cottura — V6 (user images)
+# Tempi Cottura — V7.1
 
-- Piatto da **menu a tendina** (niente foto piatti)
-- Due card metodo con immagini: **Forno** e **Airfryer**
-- **Stellina preferita** su entrambe (salvata in localStorage)
-- Airfryer **Standard/Potente** (+2min su Standard) con memoria
-- Timer con allarme 10s, vibrazione, share e ricerca ricetta
+- Start/Pausa grandi ai lati del timer, Reset accanto, Condividi in basso
+- Condivisione stato timer via URL (dish, method, mode, start, dur) → apertura sincronizzata
+- Forno/Airfryer affiancati, selezione via click con bordo verde
+- Stella preferiti: contorno bianco (off) / arancione scuro (on)
+- Dropdown piatti font grande
+- Timer con allarme 10s + vibrazione
 
 ## Pubblicazione
-Settings → Pages → branch `main` (root). Se non vedi aggiornamenti, aggiungi `?v=6u` all’URL o svuota cache.
+Carica i file nel branch Pages. Forza refresh con `?v=7.1` se serve.
