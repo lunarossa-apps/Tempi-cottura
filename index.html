@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tempi cottura</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=3.1" />
   <meta name="theme-color" content="#ef4444">
 </head>
 <body>
@@ -13,18 +13,15 @@
     <h1>Tempi cottura</h1>
 
     <section class="controls">
+      <label for="dishFilter">Cerca piatto</label>
+      <input type="text" id="dishFilter" placeholder="Es. patate, pollo, pizza..." />
+
       <label for="dish">Piatto</label>
-      <select id="dish"></select>
+      <select id="dish" size="8" style="width:100%"></select>
 
       <div class="method">
-        <label>
-          <input type="radio" name="method" value="forno" checked>
-          Forno classico
-        </label>
-        <label>
-          <input type="radio" name="method" value="airfryer">
-          Friggitrice ad aria
-        </label>
+        <label><input type="radio" name="method" value="forno" checked> Forno classico</label>
+        <label><input type="radio" name="method" value="airfryer"> Friggitrice ad aria</label>
       </div>
 
       <div class="time-row">
@@ -52,14 +49,28 @@
     </section>
 
     <footer>
-      <small>Prototipo MVP. Funziona anche offline se installato come app. </small>
+      <small>Prototipo MVP v3.1 • Funziona anche offline se installato come app.</small>
     </footer>
   </main>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(()=>{});
+      navigator.serviceWorker.register('./sw.js?v=3.1').then(reg => {
+        if (reg.waiting) reg.waiting.postMessage({type:'SKIP_WAITING'});
+        reg.addEventListener('updatefound', () => {
+          const nw = reg.installing;
+          if (nw) {
+            nw.addEventListener('statechange', () => {
+              if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+                // nuova versione pronta
+                location.reload();
+              }
+            });
+          }
+        });
+      }).catch(()=>{});
+      navigator.serviceWorker.addEventListener('controllerchange', ()=>location.reload());
     }
   </script>
-  <script src="app.js"></script>
+  <script src="app.js?v=3.1"></script>
 </body>
 </html>
