@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1" />
   <title>Tempi Cottura</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=7.4" />
+  <link rel="stylesheet" href="style.css?v=7.4.1" />
   <meta name="theme-color" content="#0b0b0c">
 </head>
 <body>
@@ -72,11 +72,7 @@
     </section>
   </main>
 
-  <!-- Prompt audio: ora viene iniettato SOLO se si arriva da link condiviso -->
-  <div id="audioPrompt" class="audio-prompt hidden" role="dialog" aria-live="polite">
-    <span>🔔 Abilita suono allarme</span>
-    <button id="enableAudio" class="primary smallbtn">Consenti</button>
-  </div>
+  <!-- Nessun banner audio nel DOM: verrà iniettato solo quando necessario (da link condiviso) -->
 
   <!-- Pannello Impostazioni -->
   <div id="settingsPanel" class="settings hidden" role="dialog" aria-labelledby="settingsTitle">
@@ -99,8 +95,8 @@
   </footer>
 
   <script>
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=7.4').catch(()=>{}); }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=7.4.1').catch(()=>{}); }
   </script>
-  <script src="app.js?v=7.4"></script>
+  <script src="app.js?v=7.4.1"></script>
 </body>
 </html>
