@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1" />
   <title>Tempi Cottura</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=5" />
+  <link rel="stylesheet" href="style.css?v=6u" />
   <meta name="theme-color" content="#0b0b0c">
 </head>
 <body>
@@ -14,56 +14,56 @@
   </header>
 
   <main class="container">
-    <!-- LIST VIEW -->
-    <section id="listView">
-      <div class="hint">Tocca un piatto per avviare il timer</div>
-      <div id="grid" class="grid"></div>
+    <section class="card">
+      <label for="dishSel">Piatto</label>
+      <select id="dishSel"></select>
+      <div class="muted">Seleziona un piatto e poi scegli il metodo di cottura.</div>
     </section>
 
-    <!-- DETAIL / TIMER VIEW -->
-    <section id="detailView" class="hidden">
-      <button id="backBtn" class="ghost">&larr; Indietro</button>
-      <div class="hero card">
-        <img id="heroImg" alt="" />
-        <div class="hero-overlay"><div id="heroTitle" class="hero-title"></div></div>
+    <section class="card methods">
+      <div class="method-card" id="cardForno">
+        <img src="assets/forno.jpg" alt="Forno tradizionale">
+        <button class="fav" id="favForno" title="Imposta Forno come preferito" aria-label="Preferito forno">☆</button>
+        <div class="method-title">Forno tradizionale</div>
+        <button class="method-btn" id="mForno">Usa Forno</button>
       </div>
-
-      <div class="card">
-        <div class="method">
-          <button id="mForno" class="method-btn active">Forno tradizionale</button>
-          <button id="mAir" class="method-btn">Friggitrice ad aria</button>
-        </div>
-
-        <div id="airRow" class="air-row hidden">
-          <label for="airModeSel">Modalità Airfryer</label>
+      <div class="method-card" id="cardAir">
+        <img src="assets/airfryer.jpg" alt="Friggitrice ad aria">
+        <button class="fav" id="favAir" title="Imposta Airfryer come preferito" aria-label="Preferito airfryer">☆</button>
+        <div class="method-title">Friggitrice ad aria</div>
+        <div class="air-row">
+          <label for="airModeSel">Modalità</label>
           <select id="airModeSel">
             <option value="potente">Potente</option>
             <option value="standard">Standard (+2 min)</option>
           </select>
         </div>
-
-        <div class="time-row">
-          <label for="minutes">Minuti</label>
-          <input type="number" id="minutes" min="0" step="1">
-          <button id="minus1" class="ghost">-1 min</button>
-          <button id="plus1" class="ghost">+1 min</button>
-        </div>
+        <button class="method-btn" id="mAir">Usa Airfryer</button>
       </div>
+    </section>
 
-      <div class="timer card">
-        <div id="display">00:00</div>
-        <div class="buttons">
-          <button id="start">Start</button>
-          <button id="pause">Pausa</button>
-          <button id="reset" class="ghost">Reset</button>
-        </div>
-        <button id="share" class="share">Condividi timer</button>
+    <section class="card">
+      <div class="time-row">
+        <label for="minutes">Minuti</label>
+        <input type="number" id="minutes" min="0" step="1">
+        <button id="minus1" class="ghost">-1 min</button>
+        <button id="plus1" class="ghost">+1 min</button>
       </div>
+    </section>
 
-      <div class="card">
-        <button id="openRecipe" class="ghost">Cerca ricetta</button>
-        <div class="muted">Si apre una ricerca web per il piatto selezionato.</div>
+    <section class="timer card">
+      <div id="display">00:00</div>
+      <div class="buttons">
+        <button id="start">Start</button>
+        <button id="pause">Pausa</button>
+        <button id="reset" class="ghost">Reset</button>
       </div>
+      <button id="share" class="share">Condividi timer</button>
+    </section>
+
+    <section class="card">
+      <button id="openRecipe" class="ghost">Cerca ricetta</button>
+      <div class="muted">Si apre una ricerca web per il piatto selezionato.</div>
     </section>
   </main>
 
@@ -72,7 +72,7 @@
   </footer>
 
   <script>
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=5').catch(()=>{}); }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=6u').catch(()=>{}); }
     let lastTouch = 0;
     document.addEventListener('touchend', function (e) {
       const now = window.performance.now();
@@ -80,6 +80,6 @@
       lastTouch = now;
     }, { passive: false });
   </script>
-  <script src="app.js?v=5"></script>
+  <script src="app.js?v=6u"></script>
 </body>
 </html>
