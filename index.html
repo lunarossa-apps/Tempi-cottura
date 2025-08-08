@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1" />
   <title>Tempi Cottura</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=7" />
+  <link rel="stylesheet" href="style.css?v=7.1" />
   <meta name="theme-color" content="#0b0b0c">
 </head>
 <body>
@@ -26,7 +26,7 @@
           <img src="assets/forno.jpg" alt="Forno tradizionale">
           <button class="fav" id="favForno" title="Imposta Forno preferito" aria-label="Preferito forno">
             <svg viewBox="0 0 24 24" width="22" height="22" class="star"><path d="M12 17.27l6.18 3.73-1.64-7.03L21 9.24l-7.19-.61L12 2 10.19 8.63 3 9.24l4.46 4.73L5.82 21z"/></svg>
-            </button>
+          </button>
           <div class="method-title">Forno</div>
         </div>
         <div class="method-card selectable" id="cardAir" tabindex="0" role="button" aria-pressed="false">
@@ -46,28 +46,24 @@
       </div>
     </section>
 
-    <section class="card tight">
-      <div class="time-row compact">
+    <section class="timer card tight">
+      <div class="timer-row">
+        <button id="start" class="primary start bigbtn">Start</button>
+        <div id="display" class="timer-display">00:00</div>
+        <button id="reset" class="ghost bigbtn">Reset</button>
+      </div>
+      <div class="time-row compact center">
         <label for="minutes" class="inline">Minuti</label>
         <input type="number" id="minutes" min="0" step="1">
         <button id="minus1" class="ghost smallbtn">-1</button>
         <button id="plus1" class="ghost smallbtn">+1</button>
       </div>
-    </section>
-
-    <section class="timer card tight">
-      <div id="display">00:00</div>
-      <div class="buttons">
-        <button id="start" class="primary start">Start</button>
-        <button id="reset" class="ghost smallbtn">Reset</button>
-        <button id="share" class="share">
-          <span class="share-icn" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a2.5 2.5 0 000-1.39l7.02-4.11A2.99 2.99 0 0018 7.91a3 3 0 10-3-3c0 .23.03.45.08.66l-7.02 4.11a3 3 0 100 4.64l7.02 4.11c-.05.21-.08.43-.08.66a3 3 0 103-3z"/></svg>
-          </span>
-          Condividi
-        </button>
-      </div>
-      <button id="pause" class="danger hidden">Pausa</button>
+      <button id="share" class="share full">
+        <span class="share-icn" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a2.5 2.5 0 000-1.39l7.02-4.11A2.99 2.99 0 0018 7.91a3 3 0 10-3-3c0 .23.03.45.08.66l-7.02 4.11a3 3 0 100 4.64l7.02 4.11c-.05.21-.08.43-.08.66a3 3 0 103-3z"/></svg>
+        </span>
+        Condividi timer
+      </button>
     </section>
   </main>
 
@@ -76,8 +72,8 @@
   </footer>
 
   <script>
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=7').catch(()=>{}); }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=7.1').catch(()=>{}); }
   </script>
-  <script src="app.js?v=7"></script>
+  <script src="app.js?v=7.1"></script>
 </body>
 </html>
