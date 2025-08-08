@@ -3,73 +3,69 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1" />
-  <title>Tempi cottura</title>
+  <title>Tempi Cottura</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=4" />
-  <meta name="theme-color" content="#ef4444">
-  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
-  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="stylesheet" href="style.css?v=4-lite" />
+  <meta name="theme-color" content="#0b0b0c">
 </head>
 <body>
+  <header class="appbar">
+    <h1>Tempi Cottura</h1>
+  </header>
+
   <main class="container">
-    <header class="hero">
-      <img id="heroImg" src="assets/banner-generic.png" alt="Header">
-      <div class="hero-text">
-        <div class="hero-title" id="heroTitle">Tempi cottura</div>
-        <div class="hero-subtitle" id="heroSub">Scegli un piatto e avvia il timer</div>
-      </div>
-    </header>
+    <!-- LIST VIEW -->
+    <section id="listView">
+      <div class="hint">Tocca un piatto per avviare il timer</div>
+      <div id="grid" class="grid"></div>
+    </section>
 
-    <section class="controls card">
-      <div class="grid">
-        <div class="col">
-          <label for="dishFilter">Cerca piatto</label>
-          <input type="text" id="dishFilter" placeholder="Es. patate, pollo, pizza..." />
+    <!-- DETAIL / TIMER VIEW -->
+    <section id="detailView" class="hidden">
+      <button id="backBtn" class="ghost">&larr; Indietro</button>
+      <div class="hero card">
+        <img id="heroImg" alt="" />
+        <div class="hero-overlay"><div id="heroTitle" class="hero-title"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="method">
+          <button id="mForno" class="method-btn active">Forno tradizionale</button>
+          <button id="mAir" class="method-btn">Friggitrice ad aria</button>
         </div>
-        <div class="col">
-          <label>Metodo</label>
-          <div class="method">
-            <label><input type="radio" name="method" value="forno" checked> Forno</label>
-            <label><input type="radio" name="method" value="airfryer"> Air Fryer</label>
-          </div>
+
+        <div class="time-row">
+          <label for="minutes">Minuti</label>
+          <input type="number" id="minutes" min="0" step="1">
+          <button id="minus1" class="ghost">-1 min</button>
+          <button id="plus1" class="ghost">+1 min</button>
         </div>
       </div>
 
-      <label for="dish">Piatto</label>
-      <select id="dish" size="8" style="width:100%"></select>
+      <div class="timer card">
+        <div id="display">00:00</div>
+        <div class="buttons">
+          <button id="start">Start</button>
+          <button id="pause">Pausa</button>
+          <button id="reset" class="ghost">Reset</button>
+        </div>
+        <button id="share" class="share">Condividi timer</button>
+      </div>
 
-      <div class="time-row">
-        <label for="minutes">Minuti</label>
-        <input type="number" id="minutes" min="0" step="1">
-        <button id="minus1" class="ghost">-1 min</button>
-        <button id="plus1" class="ghost">+1 min</button>
+      <div class="card">
+        <button id="openRecipe" class="ghost">Cerca ricetta</button>
+        <div class="muted">Si apre una ricerca web per il piatto selezionato.</div>
       </div>
     </section>
-
-    <section class="timer card">
-      <div id="display">00:00</div>
-      <div class="buttons">
-        <button id="start">Start</button>
-        <button id="pause">Pausa</button>
-        <button id="reset" class="ghost">Reset</button>
-      </div>
-      <button id="share" class="share">Condividi timer</button>
-    </section>
-
-    <section id="recipeCard" class="recipe card">
-      <div class="recipe-title">Ricetta</div>
-      <button id="openRecipe" class="ghost">Cerca ricetta</button>
-      <div class="muted">Si apre una ricerca web per il piatto selezionato.</div>
-    </section>
-
-    <footer>
-      <small>App developed by LunaRossa Ltd • Copyright LunaRossa Ltd London 2025</small>
-    </footer>
   </main>
+
+  <footer class="footer">
+    <small>App developed by LunaRossa Ltd • Copyright LunaRossa Ltd London 2025</small>
+  </footer>
+
   <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js?v=4').catch(()=>{});
-    }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=4-lite').catch(()=>{}); }
+    // Mitiga double-tap zoom iOS
     let lastTouch = 0;
     document.addEventListener('touchend', function (e) {
       const now = window.performance.now();
@@ -77,6 +73,6 @@
       lastTouch = now;
     }, { passive: false });
   </script>
-  <script src="app.js?v=4"></script>
+  <script src="app.js?v=4-lite"></script>
 </body>
 </html>
