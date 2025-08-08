@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1" />
   <title>Tempi Cottura</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=7.4" />
+  <link rel="stylesheet" href="style.css?v=7.4.2" />
   <meta name="theme-color" content="#0b0b0c">
 </head>
 <body>
   <header class="appbar">
     <button id="btnSettings" class="icon-btn" aria-label="Impostazioni" title="Impostazioni">
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" class="icon">
-        <path d="M12 8.6a3.4 3.4 0 100 6.8 3.4 3.4 0 000-6.8zm9.4 3.4c0-.5 0-1-.1-1.5l2-1.6a.8.8 0 00.2-1l-2-3.5a.8.8 0 00-1-.3l-2.4 1a8.7 8.7 0 00-2.6-1.5l-.4-2.6a.8.8 0 00-.8-.7h-4a.8.8 0 00-.8.7l-.4 2.6a8.7 8.7 0 00-2.6 1.5l-2.4-1a.8.8 0 00-1 .3l-2 3.5a.8.8 0 00.2 1l2 1.6c0 .5-.1 1-.1 1.5s0 1 .1 1.5l-2 1.6a.8.8 0 00-.2 1l2 3.5a.8.8 0 001 .3l2.4-1c.8.6 1.7 1.1 2.6 1.5l.4 2.6a.8.8 0 00.8.7h4a.8.8 0 00.8-.7l.4-2.6a8.7 8.7 0 002.6-1.5l2.4 1a.8.8 0 001-.3l2-3.5a.8.8 0 00-.2-1l-2-1.6c.1-.5.1-1 .1-1.5z" fill="currentColor"/>
+        <path d="M12 8.6a3.4 3.4 0 100 6.8 3.4 3.4 0 000-6.8zm9.4 3.4c0-.5 0-1-.1-1.5l2-1.6a.8.8 0 00.2-1l-2-3.5a.8.8 0 00-1-.3l-2.4 1a8.7 8.7 0 00-2.6-1.5l-.4-2.6a.8.8 0 00-.8-.7h-4a.8.8 0 00-.8.7l-.4 2.6a8.7 8.7 0 00-2.6 1.5l-2.4-1a.8.8 0 00-1 .3l-2 3.5a.8.8 0 00.2 1l2 1.6c0 .5-.1 1-.1 1.5s0 1 .1 1.5l-2 1.6a.8.8 0 00-.2 1l2 3.5a.8.8 0 00 1 .3l2.4-1c.8.6 1.7 1.1 2.6 1.5l.4 2.6a.8.8 0 00.8.7h4a.8.8 0 00.8-.7l.4-2.6a8.7 8.7 0 002.6-1.5l2.4 1a.8.8 0 00 1-.3l2-3.5a.8.8 0 00-.2-1l-2-1.6c.1-.5.1-1 .1-1.5z" fill="currentColor"/>
       </svg>
     </button>
     <h1>Tempi Cottura</h1>
@@ -72,13 +72,7 @@
     </section>
   </main>
 
-  <!-- Prompt audio: ora viene iniettato SOLO se si arriva da link condiviso -->
-  <div id="audioPrompt" class="audio-prompt hidden" role="dialog" aria-live="polite">
-    <span>🔔 Abilita suono allarme</span>
-    <button id="enableAudio" class="primary smallbtn">Consenti</button>
-  </div>
-
-  <!-- Pannello Impostazioni -->
+  <!-- Settings -->
   <div id="settingsPanel" class="settings hidden" role="dialog" aria-labelledby="settingsTitle">
     <div class="settings-header">
       <h2 id="settingsTitle">Impostazioni</h2>
@@ -95,12 +89,12 @@
   </div>
 
   <footer class="footer compact">
-    <small>App developed by LunaRossa Ltd • Copyright LunaRossa Ltd London 2025</small>
+    <small class="tiny">App developed by LunaRossa Ltd — Copyright LunaRossa Ltd London 2025</small>
   </footer>
 
   <script>
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=7.4').catch(()=>{}); }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=7.4.2').catch(()=>{}); }
   </script>
-  <script src="app.js?v=7.4"></script>
+  <script src="app.js?v=7.4.2"></script>
 </body>
 </html>

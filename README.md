@@ -1,11 +1,10 @@
-# Tempi Cottura — V7.4
+# Tempi Cottura — V7.4.2 (core)
 
-**Fix principali**
-- Banner “Abilita suono” mostrato **solo** quando si apre da link condiviso.
-- **Condividi** robusto (Web Share + fallback con copia negli appunti) e messaggio testuale richiesto.
-- **URL breve** con hash Base64URL (stato completo del timer).
-- **Contrasto adattivo** per testi e bottoni in tutti i temi (nero, bianco, celeste, rosa, giallo, indaco, grigio).
-- **Icona Impostazioni** in grigio visibile, pulsanti +1/-1 e label metodo sempre leggibili.
+**Fix inclusi**
+- Messaggio di condivisione **su una riga** (senza `\n`), con spazio prima dell’URL.
+- Banner audio **garantito su mobile** quando si apre da link condiviso (se AudioContext non ancora abilitato).
+- **5px** di spazio sopra il bottone **Condividi** per separarlo dal timer.
+- Footer più **piccolo** (11px) e in **unica riga**.
 
-**Deploy**
-Carica i file, riusa gli asset `assets/forno.jpg`, `assets/airfryer.jpg`, `assets/pwa_icon.png`. Forza refresh con `?v=7.4` se serve.
+**Resto invariato**
+- Link corto via hash Base64URL; timer sincronizzato; temi e contrasto; preferiti; Airfryer Standard/Potente memor.
