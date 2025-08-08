@@ -1,4 +1,4 @@
-// Tempi Cottura - v7.3 (themes + previous features)
+// Tempi Cottura - v7.4 (contrast fixes + share + conditional audio prompt)
 /* ====== Config ====== */
 const DISHES = [
   "Arancini di riso","Arrosto di maiale","Arrosto di vitello","Bastoncini di pesce","Calamari fritti",
@@ -31,15 +31,15 @@ const AIR_MODE_KEY = 'tc-air-mode';
 const AUDIO_OK_KEY = 'tc-audio-ok';
 const THEME_KEY = 'tc-theme';
 
-/* ====== Theme handling ====== */
+/* ====== Themes ====== */
 const THEMES = {
-  nero:   { bg:'#0b0b0c', card:'#151518', fg:'#f9fafb', muted:'#9ca3af', border:'#26262a', primary:'#22c55e', danger:'#ef4444' },
-  bianco: { bg:'#f8fafc', card:'#ffffff', fg:'#0b0b0c', muted:'#475569', border:'#e5e7eb', primary:'#16a34a', danger:'#dc2626', light:true },
-  celeste:{ bg:'#e0f2fe', card:'#ffffff', fg:'#0b0b0c', muted:'#334155', border:'#bae6fd', primary:'#0ea5e9', danger:'#dc2626', light:true },
-  rosa:   { bg:'#ffe4e6', card:'#ffffff', fg:'#0b0b0c', muted:'#334155', border:'#fecdd3', primary:'#f43f5e', danger:'#b91c1c', light:true },
-  giallo: { bg:'#fef9c3', card:'#ffffff', fg:'#0b0b0c', muted:'#334155', border:'#fef08a', primary:'#f59e0b', danger:'#b91c1c', light:true },
-  indaco: { bg:'#312e81', card:'#3730a3', fg:'#e0e7ff', muted:'#a5b4fc', border:'#4338ca', primary:'#22c55e', danger:'#ef4444' },
-  grigio: { bg:'#111827', card:'#1f2937', fg:'#f9fafb', muted:'#9ca3af', border:'#374151', primary:'#22c55e', danger:'#ef4444' }
+  nero:   { bg:'#0b0b0c', card:'#151518', fg:'#f9fafb', muted:'#9ca3af', border:'#26262a', primary:'#22c55e', danger:'#ef4444', btnText:'#0b0b0c', icon:'#9ca3af', light:false },
+  bianco: { bg:'#f8fafc', card:'#ffffff', fg:'#111827', muted:'#475569', border:'#e5e7eb', primary:'#16a34a', danger:'#dc2626', btnText:'#111827', icon:'#6b7280', light:true },
+  celeste:{ bg:'#e0f2fe', card:'#ffffff', fg:'#0b0b0c', muted:'#334155', border:'#bae6fd', primary:'#0ea5e9', danger:'#dc2626', btnText:'#111827', icon:'#374151', light:true },
+  rosa:   { bg:'#ffe4e6', card:'#ffffff', fg:'#0b0b0c', muted:'#334155', border:'#fecdd3', primary:'#f43f5e', danger:'#b91c1c', btnText:'#111827', icon:'#374151', light:true },
+  giallo: { bg:'#fef9c3', card:'#ffffff', fg:'#0b0b0c', muted:'#334155', border:'#fef08a', primary:'#f59e0b', danger:'#b91c1c', btnText:'#111827', icon:'#374151', light:true },
+  indaco: { bg:'#312e81', card:'#3730a3', fg:'#e0e7ff', muted:'#a5b4fc', border:'#4338ca', primary:'#22c55e', danger:'#ef4444', btnText:'#0b0b0c', icon:'#cbd5e1', light:false },
+  grigio: { bg:'#111827', card:'#1f2937', fg:'#f9fafb', muted:'#9ca3af', border:'#374151', primary:'#22c55e', danger:'#ef4444', btnText:'#0b0b0c', icon:'#9ca3af', light:false }
 };
 
 function applyTheme(name){
@@ -52,6 +52,8 @@ function applyTheme(name){
   r.style.setProperty('--border', t.border);
   r.style.setProperty('--primary', t.primary);
   r.style.setProperty('--danger', t.danger);
+  r.style.setProperty('--btnText', t.btnText);
+  r.style.setProperty('--icon', t.icon);
   document.body.classList.toggle('theme-light', !!t.light);
   localStorage.setItem(THEME_KEY, name);
 }
@@ -181,7 +183,6 @@ plus1Btn.addEventListener('click', ()=>{ secondsLeft+=60; if(endAt) endAt+=60000
 minutesInput.addEventListener('change', ()=>{ const v=Math.max(0, parseInt(minutesInput.value||'0')); minutesInput.value=v; secondsLeft=v*60; endAt=null; renderDisplay(); });
 
 startBtn.addEventListener('click', ()=>{
-  if (needsAudioUnlock()) hideAudioPrompt();
   if (!running) {
     try{ initAudio(); }catch(_){}
     if(!secondsLeft) secondsLeft = Math.max(0, parseInt(minutesInput.value||'0')*60);
@@ -213,20 +214,26 @@ function tick(){
   }
 }
 
-/* ====== Share (compact via hash) ====== */
+/* ====== Share (hash short link + custom message) ====== */
 shareBtn.addEventListener('click', async () => {
-  const totalSeconds = parseInt(minutesInput.value || '0') * 60;
-  let startedAt; let dur;
-  if (endAt) { dur = totalSeconds; startedAt = endAt - dur * 1000; } else { dur = totalSeconds; startedAt = Date.now(); }
-  const payload = { dish: dishSel.value, method, mode: (method==='airfryer'? airMode : ''), start: startedAt, dur };
-  const code = b64urlEncode(payload);
-  const url = `${location.origin}${location.pathname}#${code}`;
-  const mins = Math.max(1, Math.round(totalSeconds/60));
-  const intro = `Ti è stato condiviso un Timer per ${mins} minuti relativo alla preparazione di ${dishSel.value}.\\nClicca per seguire il timer:`;
-  try { if (navigator.share) await navigator.share({ title: 'Tempi Cottura', text: intro, url }); else { await navigator.clipboard.writeText(`${intro} ${url}`); alert('Link copiato negli appunti.'); } } catch(e){}
+  try {
+    const totalSeconds = parseInt(minutesInput.value || '0') * 60;
+    let startedAt; let dur;
+    if (endAt) { dur = totalSeconds; startedAt = endAt - dur * 1000; } else { dur = totalSeconds; startedAt = Date.now(); }
+    const payload = { dish: dishSel.value, method, mode: (method==='airfryer'? airMode : ''), start: startedAt, dur };
+    const code = b64urlEncode(payload);
+    const url = `${location.origin}${location.pathname}#${code}`;
+    const mins = Math.max(1, Math.round(totalSeconds/60));
+    const intro = `Ti è stato condiviso un Timer per ${mins} minuti relativo alla preparazione di ${dishSel.value}.\\nClicca per seguire il timer:`;
+    if (navigator.share) await navigator.share({ title: 'Tempi Cottura', text: intro, url });
+    else { await navigator.clipboard.writeText(`${intro} ${url}`); alert('Link copiato negli appunti.'); }
+  } catch(e) {
+    // fallback hard
+    try { await navigator.clipboard.writeText(location.href); alert('Impossibile condividere: link copiato.'); } catch(_) {}
+  }
 });
 
-/* ====== Init from hash ====== */
+/* ====== Init from hash (only here show audio prompt) ====== */
 function initFromHash() {
   const hash = location.hash?.replace(/^#/, '');
   if (!hash) return;
@@ -245,45 +252,30 @@ function initFromHash() {
   if (needsAudioUnlock()) showAudioPrompt();
 }
 
-/* ====== Settings: build theme grid ====== */
+/* ====== Settings / Themes ====== */
+const THEMES_LIST = [
+  ['nero','Nero'],['bianco','Bianco'],['celeste','Celeste'],['rosa','Rosa'],['giallo','Giallo'],['indaco','Indaco'],['grigio','Grigio']
+];
 function buildThemeGrid(){
-  const entries = [
-    ['nero','Nero'],['bianco','Bianco'],['celeste','Celeste'],['rosa','Rosa'],
-    ['giallo','Giallo'],['indaco','Indaco'],['grigio','Grigio']
-  ];
   themeGrid.innerHTML = '';
   const current = localStorage.getItem(THEME_KEY) || 'nero';
-  entries.forEach(([key,label])=>{
-    const sw = document.createElement('button');
-    sw.className = 'theme-swatch';
-    sw.setAttribute('data-theme', key);
+  THEMES_LIST.forEach(([key,label])=>{
+    const sw = document.createElement('button'); sw.className = 'theme-swatch'; sw.setAttribute('data-theme', key);
     const dot = document.createElement('span'); dot.className='theme-dot';
-    // color preview
     const t = THEMES[key];
-    dot.style.background = t.bg;
-    dot.style.borderColor = t.light ? '#111827' : '#ffffff';
+    dot.style.background = t.bg; dot.style.borderColor = t.light ? '#111827' : '#ffffff';
     const cap = document.createElement('span'); cap.className='theme-label'; cap.textContent = label;
     if (key===current) sw.style.outline = '2px solid var(--green)';
     sw.appendChild(dot); sw.appendChild(cap);
-    sw.addEventListener('click', ()=>{
-      applyTheme(key);
-      buildThemeGrid();
-    });
+    sw.addEventListener('click', ()=>{ applyTheme(key); buildThemeGrid(); });
     themeGrid.appendChild(sw);
   });
 }
-
-btnSettings.addEventListener('click', ()=>{
-  buildThemeGrid();
-  settingsPanel.classList.remove('hidden');
-});
+btnSettings.addEventListener('click', ()=>{ buildThemeGrid(); settingsPanel.classList.remove('hidden'); });
 closeSettings.addEventListener('click', ()=> settingsPanel.classList.add('hidden'));
 window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') settingsPanel.classList.add('hidden'); });
 
 /* ====== Init ====== */
-// Theme at startup
 applyTheme(localStorage.getItem(THEME_KEY) || 'nero');
-// Timer/Dish defaults
 if (!location.hash) { dishSel.selectedIndex=0; applyPreset(); }
-// From hash
 initFromHash();
