@@ -3,7 +3,7 @@
   --bg:#0b0b0c;--card:#151518;--fg:#f9fafb;--muted:#9ca3af;--accent:#ef4444;--border:#26262a;
   --green:#22c55e;--starOn:#e69500;--starOff:#ffffff;
   --primary:#22c55e;--danger:#ef4444;
-  --btnText:#ffffff; --icon:#9ca3af
+  --btnText:#0b0b0c; --icon:#9ca3af
 }
 html,body{height:100%}
 body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--fg)}
@@ -32,7 +32,7 @@ button.ghost{background:transparent;border:1px solid var(--border);padding:8px 1
 button.smallbtn{padding:8px 10px}
 button.primary{background:var(--primary);padding:12px 16px;font-weight:700}
 button.danger{background:var(--danger);padding:12px 16px;font-weight:700}
-button.share{background:#2563eb;border:1px solid #1e40af;padding:12px 14px;border-radius:10px;display:inline-flex;align-items:center;gap:8px;color:#fff}
+button.share{background:#2563eb;border:1px solid #1e40af;padding:12px 14px;border-radius:10px;display:inline-flex;align-items:center;gap:8px;color:#fff;margin-top:5px}
 button.share.full{width:100%}
 .share-icn .icon{display:block}
 .timer{text-align:center}
@@ -41,8 +41,9 @@ button.share.full{width:100%}
 .timer-display{font-size:56px;letter-spacing:1px;font-variant-numeric:tabular-nums;color:var(--fg)}
 .muted{color:var(--muted)}
 .footer.compact{padding:8px 12px;text-align:center;color:var(--muted);border-top:1px solid var(--border)}
+.footer .tiny{font-size:11px;white-space:nowrap}
 .hidden{display:none}
-/* Audio prompt */
+/* Audio prompt (injected) */
 .audio-prompt{
   position: fixed; left: 12px; right: 12px; bottom: 12px;
   background: #1f2937; color: #fff; border: 1px solid #374151;
@@ -61,12 +62,13 @@ button.share.full{width:100%}
 .theme-dot{width:26px;height:26px;border-radius:50%;border:2px solid #fff}
 .theme-label{font-size:12px;color:var(--fg)}
 
-/* Light theme overrides for readability */
+/* Light theme overrides */
 .theme-light .appbar{background:rgba(255,255,255,0.7)}
 .theme-light .big-select, .theme-light .compact-select, .theme-light input[type=number]{background:#ffffff;color:#111827;border-color:#d1d5db}
 .theme-light .card{background:#ffffff;border-color:#e5e7eb}
 .theme-light .method-card{background:#ffffff}
 .theme-light .method-title{color:#111827}
+.theme-light button{color:#111827}
 .theme-light button.ghost{color:#111827;border-color:#d1d5db}
 .theme-light .icon-btn{color:#6b7280;border-color:#d1d5db}
 .theme-light .fav{background:rgba(255,255,255,0.8);border-color:#d1d5db}
