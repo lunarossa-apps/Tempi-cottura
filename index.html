@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tempi cottura</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#ef4444">
+</head>
+<body>
+  <main class="container">
+    <h1>Tempi cottura</h1>
+
+    <section class="controls">
+      <label for="dish">Piatto</label>
+      <select id="dish"></select>
+
+      <div class="method">
+        <label>
+          <input type="radio" name="method" value="forno" checked>
+          Forno classico
+        </label>
+        <label>
+          <input type="radio" name="method" value="airfryer">
+          Friggitrice ad aria
+        </label>
+      </div>
+
+      <div class="time-row">
+        <label for="minutes">Minuti</label>
+        <input type="number" id="minutes" min="0" step="1">
+        <button id="minus1" class="ghost">-1 min</button>
+        <button id="plus1" class="ghost">+1 min</button>
+      </div>
+    </section>
+
+    <section class="timer">
+      <div id="display">00:00</div>
+      <div class="buttons">
+        <button id="start">Start</button>
+        <button id="pause">Pausa</button>
+        <button id="reset" class="ghost">Reset</button>
+      </div>
+      <button id="share" class="share">
+        Condividi timer
+      </button>
+    </section>
+
+    <section id="recipeCard" class="recipe hidden">
+      <div class="recipe-title">Ricetta suggerita</div>
+      <a id="recipeLink" href="#" target="_blank" rel="noopener">Apri ricetta</a>
+      <div id="recipeStatus" class="muted"></div>
+    </section>
+
+    <footer>
+      <small>Prototipo MVP. Funziona anche offline se installato come app. </small>
+    </footer>
+  </main>
+  <script>
+    // Register service worker for basic PWA (optional)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(()=>{});
+    }
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>
