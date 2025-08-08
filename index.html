@@ -2,30 +2,41 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1" />
   <title>Tempi cottura</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=4" />
   <meta name="theme-color" content="#ef4444">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
 </head>
 <body>
   <main class="container">
-    <h1>Tempi cottura</h1>
-
-    <section class="controls">
-      <label for="dish">Piatto</label>
-      <select id="dish"></select>
-
-      <div class="method">
-        <label>
-          <input type="radio" name="method" value="forno" checked>
-          Forno classico
-        </label>
-        <label>
-          <input type="radio" name="method" value="airfryer">
-          Friggitrice ad aria
-        </label>
+    <header class="hero">
+      <img id="heroImg" src="assets/banner-generic.png" alt="Header">
+      <div class="hero-text">
+        <div class="hero-title" id="heroTitle">Tempi cottura</div>
+        <div class="hero-subtitle" id="heroSub">Scegli un piatto e avvia il timer</div>
       </div>
+    </header>
+
+    <section class="controls card">
+      <div class="grid">
+        <div class="col">
+          <label for="dishFilter">Cerca piatto</label>
+          <input type="text" id="dishFilter" placeholder="Es. patate, pollo, pizza..." />
+        </div>
+        <div class="col">
+          <label>Metodo</label>
+          <div class="method">
+            <label><input type="radio" name="method" value="forno" checked> Forno</label>
+            <label><input type="radio" name="method" value="airfryer"> Air Fryer</label>
+          </div>
+        </div>
+      </div>
+
+      <label for="dish">Piatto</label>
+      <select id="dish" size="8" style="width:100%"></select>
 
       <div class="time-row">
         <label for="minutes">Minuti</label>
@@ -35,7 +46,7 @@
       </div>
     </section>
 
-    <section class="timer">
+    <section class="timer card">
       <div id="display">00:00</div>
       <div class="buttons">
         <button id="start">Start</button>
@@ -45,21 +56,27 @@
       <button id="share" class="share">Condividi timer</button>
     </section>
 
-    <section id="recipeCard" class="recipe">
+    <section id="recipeCard" class="recipe card">
       <div class="recipe-title">Ricetta</div>
       <button id="openRecipe" class="ghost">Cerca ricetta</button>
       <div class="muted">Si apre una ricerca web per il piatto selezionato.</div>
     </section>
 
     <footer>
-      <small>Prototipo MVP. Funziona anche offline se installato come app. </small>
+      <small>App developed by LunaRossa Ltd • Copyright LunaRossa Ltd London 2025</small>
     </footer>
   </main>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(()=>{});
+      navigator.serviceWorker.register('./sw.js?v=4').catch(()=>{});
     }
+    let lastTouch = 0;
+    document.addEventListener('touchend', function (e) {
+      const now = window.performance.now();
+      if (now - lastTouch <= 300) { e.preventDefault(); }
+      lastTouch = now;
+    }, { passive: false });
   </script>
-  <script src="app.js"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
