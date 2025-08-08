@@ -1,5 +1,5 @@
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open('tc-v1').then(c => c.addAll([
+  e.waitUntil(caches.open('tc-v2').then(c => c.addAll([
     './', './index.html', './style.css', './app.js', './manifest.json'
   ])));
 });

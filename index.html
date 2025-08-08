@@ -42,15 +42,13 @@
         <button id="pause">Pausa</button>
         <button id="reset" class="ghost">Reset</button>
       </div>
-      <button id="share" class="share">
-        Condividi timer
-      </button>
+      <button id="share" class="share">Condividi timer</button>
     </section>
 
-    <section id="recipeCard" class="recipe hidden">
-      <div class="recipe-title">Ricetta suggerita</div>
-      <a id="recipeLink" href="#" target="_blank" rel="noopener">Apri ricetta</a>
-      <div id="recipeStatus" class="muted"></div>
+    <section id="recipeCard" class="recipe">
+      <div class="recipe-title">Ricetta</div>
+      <button id="openRecipe" class="ghost">Cerca ricetta</button>
+      <div class="muted">Si apre una ricerca web per il piatto selezionato.</div>
     </section>
 
     <footer>
@@ -58,7 +56,6 @@
     </footer>
   </main>
   <script>
-    // Register service worker for basic PWA (optional)
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js').catch(()=>{});
     }

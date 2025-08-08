@@ -1,9 +1,35 @@
-// Tempi cottura MVP (Web)
+// Tempi cottura MVP (Web) v2
 const DISH_PRESETS = {
+  "Lasagne": { forno: 35, airfryer: 22 },
+  "Pizza margherita": { forno: 12, airfryer: 8 },
+  "Pane casereccio": { forno: 40, airfryer: 25 },
+  "Focaccia": { forno: 20, airfryer: 15 },
   "Patate al forno": { forno: 45, airfryer: 25 },
-  "Pollo a tocchetti": { forno: 30, airfryer: 18 },
+  "Patatine fritte": { forno: 25, airfryer: 15 },
+  "Pollo intero": { forno: 60, airfryer: 45 },
+  "Cosce di pollo": { forno: 45, airfryer: 30 },
+  "Petto di pollo impanato": { forno: 25, airfryer: 15 },
+  "Polpette di carne": { forno: 30, airfryer: 18 },
+  "Salsiccia al forno": { forno: 35, airfryer: 20 },
+  "Orata al forno": { forno: 25, airfryer: 18 },
+  "Salmone al forno": { forno: 20, airfryer: 12 },
+  "Branzino al forno": { forno: 25, airfryer: 15 },
   "Verdure grigliate": { forno: 20, airfryer: 12 },
-  "Lasagne": { forno: 35, airfryer: 22 }
+  "Melanzane alla parmigiana": { forno: 35, airfryer: 20 },
+  "Zucchine ripiene": { forno: 30, airfryer: 18 },
+  "Peperoni ripieni": { forno: 35, airfryer: 20 },
+  "Cavolfiore gratinato": { forno: 25, airfryer: 15 },
+  "Broccoli gratinati": { forno: 20, airfryer: 12 },
+  "Torta salata": { forno: 30, airfryer: 20 },
+  "Quiche lorraine": { forno: 35, airfryer: 22 },
+  "Frittata al forno": { forno: 20, airfryer: 12 },
+  "Muffin dolci": { forno: 20, airfryer: 12 },
+  "Torta margherita": { forno: 35, airfryer: 22 },
+  "Crostata di marmellata": { forno: 30, airfryer: 20 },
+  "Biscotti": { forno: 12, airfryer: 8 },
+  "Brownies": { forno: 25, airfryer: 15 },
+  "Cannelloni": { forno: 35, airfryer: 22 },
+  "Lasagna vegetariana": { forno: 35, airfryer: 22 }
 };
 
 const APP_URL = location.origin + location.pathname; // link per la condivisione
@@ -17,10 +43,7 @@ const resetBtn = document.getElementById('reset');
 const minus1Btn = document.getElementById('minus1');
 const plus1Btn = document.getElementById('plus1');
 const shareBtn = document.getElementById('share');
-
-const recipeCard = document.getElementById('recipeCard');
-const recipeLink = document.getElementById('recipeLink');
-const recipeStatus = document.getElementById('recipeStatus');
+const recipeBtn = document.getElementById('openRecipe');
 
 let method = 'forno';
 let secondsLeft = 0;
@@ -43,7 +66,6 @@ function applyPreset() {
   secondsLeft = mins * 60;
   endAt = null;
   renderDisplay();
-  fetchRecipeLink().catch(()=>{});
 }
 
 function renderDisplay() {
@@ -158,7 +180,7 @@ function maybeNotify() {
 shareBtn.addEventListener('click', async () => {
   const mm = String(Math.floor(secondsLeft / 60)).padStart(2, '0');
   const ss = String(secondsLeft % 60).padStart(2, '0');
-  const text = `Timer cottura: ${dishSel.value} (${method}) impostato a ${mm}:${ss}.\nScarica l’app: ${APP_URL}`;
+  const text = `Timer cottura: ${dishSel.value} (${method}) impostato a ${mm}:${ss}.\nApri l’app: ${APP_URL}`;
   try {
     if (navigator.share) {
       await navigator.share({ title: 'Tempi cottura', text });
@@ -171,42 +193,13 @@ shareBtn.addEventListener('click', async () => {
   }
 });
 
-// Recipe suggestion using DuckDuckGo HTML via AllOrigins (public CORS proxy).
-// Fallback: link di ricerca.
-async function fetchRecipeLink() {
-  recipeCard.classList.remove('hidden');
-  recipeStatus.textContent = 'Cerco una ricetta...';
-  recipeLink.textContent = '...';
-  recipeLink.href = '#';
-
-  const q = `ricetta ${dishSel.value} ${method === 'airfryer' ? 'friggitrice ad aria' : 'forno'}`;
-  const ddg = `https://duckduckgo.com/html/?q=${encodeURIComponent(q)}`;
-  const proxied = `https://api.allorigins.win/get?url=${encodeURIComponent(ddg)}`;
-
-  try {
-    const res = await fetch(proxied, { cache: 'no-store' });
-    if (!res.ok) throw new Error('Fetch failed');
-    const data = await res.json();
-    const html = data.contents;
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    // First organic result
-    const first = doc.querySelector('.result__a');
-    if (first && first.getAttribute('href')) {
-      const href = first.getAttribute('href');
-      const title = first.textContent.trim();
-      recipeLink.textContent = title || 'Apri ricetta';
-      recipeLink.href = href;
-      recipeStatus.textContent = '';
-      return;
-    }
-    throw new Error('No result');
-  } catch (e) {
-    // Fallback: search link
-    const searchLink = `https://duckduckgo.com/?q=${encodeURIComponent(q)}`;
-    recipeLink.textContent = 'Vedi risultati di ricerca';
-    recipeLink.href = searchLink;
-    recipeStatus.textContent = 'Risultato diretto non disponibile. Ti porto alla ricerca.';
-  }
+// Recipe search button: opens a web search for the selected dish/method
+if (recipeBtn) {
+  recipeBtn.addEventListener('click', () => {
+    const q = `ricetta ${dishSel.value} ${method === 'airfryer' ? 'friggitrice ad aria' : 'forno'}`;
+    const url = `https://duckduckgo.com/?q=${encodeURIComponent(q)}`;
+    window.open(url, '_blank', 'noopener');
+  });
 }
 
 // Initial
