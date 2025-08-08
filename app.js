@@ -1,48 +1,70 @@
-// Tempi Cottura - v4 lite (senza assets reali)
+// Tempi Cottura - v5 (code only, assets empty)
 const DISHES = [
+  { name: "Arancini di riso", file: "arancini_riso.jpg" },
+  { name: "Arrosto di maiale", file: "arrosto_maiale.jpg" },
+  { name: "Arrosto di vitello", file: "arrosto_vitello.jpg" },
+  { name: "Bastoncini di pesce", file: "bastoncini_pesce.jpg" },
+  { name: "Calamari fritti", file: "calamari_fritti.jpg" },
+  { name: "Cannelloni ricotta e spinaci", file: "cannelloni_ricotta_spinaci.jpg" },
+  { name: "Cordon Bleu", file: "cordon_bleu.jpg" },
+  { name: "Cotolette di pollo", file: "cotolette_pollo.jpg" },
+  { name: "Crostata di marmellata", file: "crostata_marmellata.jpg" },
+  { name: "Crocchette di patate", file: "crocchette_patate.jpg" },
+  { name: "Focaccia", file: "focaccia.jpg" },
+  { name: "Frittata al forno", file: "frittata_al_forno.jpg" },
+  { name: "Frittelle dolci", file: "frittelle_dolci.jpg" },
+  { name: "Lasagna vegetariana", file: "lasagna_vegetariana.jpg" },
   { name: "Lasagne al ragù", file: "lasagne.jpg" },
-  { name: "Pizza margherita", file: "pizza_margherita.jpg" },
+  { name: "Mini pizze", file: "mini_pizze.jpg" },
+  { name: "Mozzarella in carrozza", file: "mozzarella_in_carrozza.jpg" },
+  { name: "Orata al forno", file: "orata_al_forno.jpg" },
   { name: "Pane casereccio", file: "pane_casereccio.jpg" },
   { name: "Parmigiana di melanzane", file: "parmigiana_melanzane.jpg" },
-  { name: "Torta al cioccolato", file: "torta_cioccolato.jpg" },
-  { name: "Arrosto di vitello", file: "arrosto_vitello.jpg" },
-  { name: "Arrosto di maiale", file: "arrosto_maiale.jpg" },
-  { name: "Pesce al forno con patate", file: "pesce_patate.jpg" },
   { name: "Patate al forno", file: "patate_al_forno.jpg" },
-  { name: "Cannelloni ricotta e spinaci", file: "cannelloni_ricotta_spinaci.jpg" },
-  { name: "Crostata di marmellata", file: "crostata_marmellata.jpg" },
-  { name: "Pollo fritto", file: "pollo_fritto.jpg" },
   { name: "Patatine fritte", file: "patatine_fritte.jpg" },
-  { name: "Bastoncini di pesce", file: "bastoncini_pesce.jpg" },
-  { name: "Sofficini", file: "sofficini.jpg" },
-  { name: "Cordon Bleu", file: "cordon_bleu.jpg" },
-  { name: "Polpette di carne", file: "polpette_di_carne.jpg" },
-  { name: "Cotolette di pollo", file: "cotolette_pollo.jpg" },
-  { name: "Crocchette di patate", file: "crocchette_patate.jpg" },
-  { name: "Calamari fritti", file: "calamari_fritti.jpg" },
-  { name: "Verdure grigliate", file: "verdure_grigliate.jpg" },
-  { name: "Arancini di riso", file: "arancini_riso.jpg" },
-  { name: "Mozzarella in carrozza", file: "mozzarella_in_carrozza.jpg" },
-  { name: "Mini pizze", file: "mini_pizze.jpg" },
-  { name: "Frittelle dolci", file: "frittelle_dolci.jpg" },
+  { name: "Pesce al forno con patate", file: "pesce_patate.jpg" },
+  { name: "Pizza margherita", file: "pizza_margherita.jpg" },
   { name: "Pizza surgelata", file: "pizza_surgelata.jpg" },
-  { name: "Pizza tonda", file: "pizza_tonda.jpg" }
+  { name: "Pizza tonda", file: "pizza_tonda.jpg" },
+  { name: "Pollo fritto", file: "pollo_fritto.jpg" },
+  { name: "Polpette di carne", file: "polpette_di_carne.jpg" },
+  { name: "Quiche lorraine", file: "quiche_lorraine.jpg" },
+  { name: "Salmone al forno", file: "salmone_al_forno.jpg" },
+  { name: "Salsiccia al forno", file: "salsiccia_al_forno.jpg" },
+  { name: "Sofficini", file: "sofficini.jpg" },
+  { name: "Torta al cioccolato", file: "torta_cioccolato.jpg" },
+  { name: "Torta margherita", file: "torta_margherita.jpg" },
+  { name: "Torta salata", file: "torta_salata.jpg" },
+  { name: "Verdure grigliate", file: "verdure_grigliate.jpg" },
+  { name: "Zucchine ripiene", file: "zucchine_ripiene.jpg" }
 ];
 
-// tempi indicativi (min) per metodo
 const PRESETS = {
   forno: {
     "Lasagne al ragù": 35, "Pizza margherita": 12, "Pane casereccio": 40, "Parmigiana di melanzane": 35,
     "Torta al cioccolato": 35, "Arrosto di vitello": 60, "Arrosto di maiale": 55, "Pesce al forno con patate": 30,
     "Patate al forno": 45, "Cannelloni ricotta e spinaci": 35, "Crostata di marmellata": 30, "Pizza surgelata": 14,
-    "Pizza tonda": 12
+    "Pizza tonda": 12, "Pollo fritto": 25, "Patatine fritte": 25, "Bastoncini di pesce": 15, "Sofficini": 18,
+    "Cordon Bleu": 20, "Polpette di carne": 30, "Cotolette di pollo": 20, "Crocchette di patate": 20,
+    "Calamari fritti": 15, "Verdure grigliate": 20, "Arancini di riso": 20, "Mozzarella in carrozza": 12,
+    "Mini pizze": 12, "Frittelle dolci": 12, "Focaccia": 20, "Frittata al forno": 20, "Lasagna vegetariana": 35,
+    "Orata al forno": 25, "Quiche lorraine": 35, "Salmone al forno": 20, "Salsiccia al forno": 35,
+    "Torta margherita": 35, "Torta salata": 30, "Zucchine ripiene": 30
   },
   airfryer: {
-    "Pollo fritto": 18, "Patatine fritte": 15, "Bastoncini di pesce": 10, "Sofficini": 11, "Cordon Bleu": 12,
-    "Polpette di carne": 18, "Cotolette di pollo": 15, "Crocchette di patate": 12, "Calamari fritti": 8,
-    "Verdure grigliate": 12, "Arancini di riso": 12, "Mozzarella in carrozza": 8, "Mini pizze": 9, "Frittelle dolci": 8
+    "Lasagne al ragù": 22, "Pizza margherita": 8, "Pane casereccio": 25, "Parmigiana di melanzane": 20,
+    "Torta al cioccolato": 22, "Arrosto di vitello": 45, "Arrosto di maiale": 45, "Pesce al forno con patate": 22,
+    "Patate al forno": 25, "Cannelloni ricotta e spinaci": 22, "Crostata di marmellata": 20, "Pizza surgelata": 10,
+    "Pizza tonda": 8, "Pollo fritto": 18, "Patatine fritte": 15, "Bastoncini di pesce": 10, "Sofficini": 11,
+    "Cordon Bleu": 12, "Polpette di carne": 14, "Cotolette di pollo": 12, "Crocchette di patate": 12,
+    "Calamari fritti": 8, "Verdure grigliate": 12, "Arancini di riso": 12, "Mozzarella in carrozza": 7,
+    "Mini pizze": 9, "Frittelle dolci": 8, "Focaccia": 15, "Frittata al forno": 12, "Lasagna vegetariana": 22,
+    "Orata al forno": 18, "Quiche lorraine": 22, "Salmone al forno": 12, "Salsiccia al forno": 20,
+    "Torta margherita": 22, "Torta salata": 20, "Zucchine ripiene": 18
   }
 };
+
+let airMode = localStorage.getItem('tc-air-mode') || 'potente';
 
 // --- UI Refs
 const grid = document.getElementById('grid');
@@ -53,6 +75,8 @@ const heroImg = document.getElementById('heroImg');
 const heroTitle = document.getElementById('heroTitle');
 const mForno = document.getElementById('mForno');
 const mAir = document.getElementById('mAir');
+const airRow = document.getElementById('airRow');
+const airModeSel = document.getElementById('airModeSel');
 const minutesInput = document.getElementById('minutes');
 const minus1Btn = document.getElementById('minus1');
 const plus1Btn = document.getElementById('plus1');
@@ -63,20 +87,40 @@ const resetBtn = document.getElementById('reset');
 const shareBtn = document.getElementById('share');
 const recipeBtn = document.getElementById('openRecipe');
 
+// Preferiti
+const FAV_KEY = 'tc-favorites';
+function getFavs(){ try{ return JSON.parse(localStorage.getItem(FAV_KEY)||'[]'); }catch{ return []; } }
+function isFav(file){ return getFavs().includes(file); }
+function toggleFav(file){
+  const favs = new Set(getFavs());
+  if (favs.has(file)) favs.delete(file); else favs.add(file);
+  localStorage.setItem(FAV_KEY, JSON.stringify([...favs]));
+}
+
 // --- State
 let currentDish = null;
-let method = 'forno'; // default
+let method = 'forno';
 let secondsLeft = 0;
 let timerId = null;
 let endAt = null;
 
-// --- Build grid (2 columns, alphabetical)
+// --- Grid
 DISHES.sort((a,b)=>a.name.localeCompare(b.name)).forEach(d => {
   const item = document.createElement('div');
   item.className = 'grid-item';
   const src = `assets/${d.file}`;
-  item.innerHTML = `<img src="${src}" alt="${d.name}" onerror="this.style.opacity='0.4'">
-    <div class="label">${d.name}</div>`;
+  item.innerHTML = `
+    <img src="${src}" alt="${d.name}" onerror="this.style.opacity='0.4'">
+    <div class="label">${d.name}</div>
+    <button class="fav" aria-label="Preferito" title="Preferito">★</button>
+  `;
+  const favBtn = item.querySelector('.fav');
+  if (isFav(d.file)) favBtn.classList.add('on');
+  favBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleFav(d.file);
+    favBtn.classList.toggle('on', isFav(d.file));
+  });
   item.addEventListener('click', () => openDish(d));
   grid.appendChild(item);
 });
@@ -87,7 +131,8 @@ function openDish(d) {
   detailView.classList.remove('hidden');
   heroImg.src = `assets/${d.file}`;
   heroTitle.textContent = d.name;
-  setMethod('forno'); // default on open
+  setMethod('forno');
+  airModeSel.value = airMode;
   applyPreset();
 }
 
@@ -95,10 +140,17 @@ function setMethod(m) {
   method = m;
   mForno.classList.toggle('active', m==='forno');
   mAir.classList.toggle('active', m==='airfryer');
+  airRow.classList.toggle('hidden', m!=='airfryer');
 }
 
 mForno.addEventListener('click', ()=>{ setMethod('forno'); applyPreset(); });
 mAir.addEventListener('click', ()=>{ setMethod('airfryer'); applyPreset(); });
+
+airModeSel.addEventListener('change', () => {
+  airMode = airModeSel.value;
+  localStorage.setItem('tc-air-mode', airMode);
+  applyPreset();
+});
 
 backBtn.addEventListener('click', () => {
   stopTimer();
@@ -109,10 +161,20 @@ backBtn.addEventListener('click', () => {
 function applyPreset() {
   if (!currentDish) return;
   const n = currentDish.name;
-  const mins = (method==='forno' ? PRESETS.forno[n] : PRESETS.airfryer[n]) ?? 10;
+  const map = method==='forno' ? PRESETS.forno : PRESETS.airfryer;
+  let mins = map[n];
+  if (mins === undefined) {
+    alert(`Tempo non definito per "${n}" (${method}).`);
+    startBtn.disabled = true;
+    return;
+  }
+  if (method === 'airfryer' && airMode === 'standard') {
+    mins += 2;
+  }
   minutesInput.value = mins;
   secondsLeft = mins * 60;
   endAt = null;
+  startBtn.disabled = false;
   renderDisplay();
 }
 
@@ -196,7 +258,7 @@ function maybeNotify(){
 shareBtn.addEventListener('click', async()=>{
   const mm=String(Math.floor(secondsLeft/60)).padStart(2,'0');
   const ss=String(secondsLeft%60).padStart(2,'0');
-  const text=`Timer cottura: ${currentDish?currentDish.name:''} (${method}) a ${mm}:${ss}.\nApri l’app: ${location.href}`;
+  const text=`Timer cottura: ${currentDish?currentDish.name:''} (${method}${method==='airfryer'?' • '+airMode:''}) a ${mm}:${ss}.\nApri l’app: ${location.href}`;
   try{
     if(navigator.share){ await navigator.share({title:'Tempi Cottura', text}); }
     else{ await navigator.clipboard.writeText(text); alert('Copiato negli appunti.'); }

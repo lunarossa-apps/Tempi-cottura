@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1" />
   <title>Tempi Cottura</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=4-lite" />
+  <link rel="stylesheet" href="style.css?v=5" />
   <meta name="theme-color" content="#0b0b0c">
 </head>
 <body>
@@ -32,6 +32,14 @@
         <div class="method">
           <button id="mForno" class="method-btn active">Forno tradizionale</button>
           <button id="mAir" class="method-btn">Friggitrice ad aria</button>
+        </div>
+
+        <div id="airRow" class="air-row hidden">
+          <label for="airModeSel">Modalità Airfryer</label>
+          <select id="airModeSel">
+            <option value="potente">Potente</option>
+            <option value="standard">Standard (+2 min)</option>
+          </select>
         </div>
 
         <div class="time-row">
@@ -64,8 +72,7 @@
   </footer>
 
   <script>
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=4-lite').catch(()=>{}); }
-    // Mitiga double-tap zoom iOS
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=5').catch(()=>{}); }
     let lastTouch = 0;
     document.addEventListener('touchend', function (e) {
       const now = window.performance.now();
@@ -73,6 +80,6 @@
       lastTouch = now;
     }, { passive: false });
   </script>
-  <script src="app.js?v=4-lite"></script>
+  <script src="app.js?v=5"></script>
 </body>
 </html>
