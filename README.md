@@ -1,11 +1,11 @@
-# Tempi Cottura — V7.1
+# Tempi Cottura — V7.3
 
-- Start/Pausa grandi ai lati del timer, Reset accanto, Condividi in basso
-- Condivisione stato timer via URL (dish, method, mode, start, dur) → apertura sincronizzata
-- Forno/Airfryer affiancati, selezione via click con bordo verde
-- Stella preferiti: contorno bianco (off) / arancione scuro (on)
-- Dropdown piatti font grande
-- Timer con allarme 10s + vibrazione
+**Novità**
+- **Impostazioni (rotella in alto a sinistra)** con scelta **tema colore**: Nero, Bianco, Celeste, Rosa, Giallo, Indaco, Grigio. Preferenza salvata.
+- Mantiene: link di condivisione **compatto** (hash Base64URL) con sincronizzazione del timer, banner “Abilita suono”, layout one-screen.
 
-## Pubblicazione
-Carica i file nel branch Pages. Forza refresh con `?v=7.1` se serve.
+**Deploy**
+Carica i file nel repo/Pages. Se vedi cache vecchia: apri con `?v=7.3`.
+
+**Asset**
+Riusa `assets/forno.jpg`, `assets/airfryer.jpg`, `assets/pwa_icon.png`.
