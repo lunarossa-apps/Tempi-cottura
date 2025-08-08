@@ -1,38 +1,46 @@
-# Tempi cottura (Web MVP)
+# Tempi Cottura (v4 lite, senza assets)
 
-Timer "Pomodoro" per cucina con preset per piatto e metodo (forno / friggitrice ad aria), condivisione e suggerimento ricetta.
+Webapp PWA per timer di cottura (forno / friggitrice ad aria) con griglia piatti a 2 colonne.
 
-## Funzioni
-- Preset per piatto e metodo
-- Start / Pausa / Reset e ±1 min
-- Beep a fine timer + notifica browser (se consentita)
-- Condivisione con link all'app
-- Ricetta suggerita in-app (primo risultato web via proxy pubblico)
+## Contenuto
+- `index.html`, `style.css`, `app.js`, `manifest.json`, `sw.js`
+- cartella `assets/` (vuota): carica qui le immagini quando pronte
 
-## Sviluppo locale
-```bash
-python3 -m http.server 8000
-# poi apri http://localhost:8000
-```
+## Come pubblicare su GitHub Pages
+1. Crea un repository pubblico e carica tutti i file di questo pacchetto.
+2. Vai su **Settings → Pages** → `Source: Branch main / root` (o GitHub Actions).
+3. Attendi 1–2 minuti: l’URL sarà `https://<user>.github.io/<repo>/`.
 
-## Deploy su GitHub Pages (consigliato)
-1. Crea un repository **pubblico** su GitHub (es. `tempi-cottura`).
-2. Esegui i comandi sotto dal terminale nella cartella del progetto.
-3. Apri *Settings → Pages* e verifica che sia selezionato **GitHub Actions** come sorgente.
+## Come aggiungere le immagini (assets)
+Carica nella cartella `assets/` i file con questi nomi (case-sensitive):
 
-```bash
-git init
-git add .
-git commit -m "chore: first commit (Tempi cottura web mvp)"
-git branch -M main
-git remote add origin https://github.com/<TUO_USERNAME>/tempi-cottura.git
-git push -u origin main
-```
+- `lasagne.jpg`
+- `pizza_margherita.jpg`
+- `pane_casereccio.jpg`
+- `parmigiana_melanzane.jpg`
+- `torta_cioccolato.jpg`
+- `arrosto_vitello.jpg`
+- `arrosto_maiale.jpg`
+- `pesce_patate.jpg`
+- `patate_al_forno.jpg`
+- `cannelloni_ricotta_spinaci.jpg`
+- `crostata_marmellata.jpg`
+- `pollo_fritto.jpg`
+- `patatine_fritte.jpg`
+- `bastoncini_pesce.jpg`
+- `sofficini.jpg`
+- `cordon_bleu.jpg`
+- `polpette_di_carne.jpg`
+- `cotolette_pollo.jpg`
+- `crocchette_patate.jpg`
+- `calamari_fritti.jpg`
+- `verdure_grigliate.jpg`
+- `arancini_riso.jpg`
+- `mozzarella_in_carrozza.jpg`
+- `mini_pizze.jpg`
+- `frittelle_dolci.jpg`
+- `pizza_surgelata.jpg`
+- `pizza_tonda.jpg`
+- **Icona PWA:** `pwa_icon.png` (192×192 e 512×512 con lo stesso nome)
 
-La pipeline `Deploy Pages` pubblicherà automaticamente su GitHub Pages all'indirizzo:
-`https://<TUO_USERNAME>.github.io/tempi-cottura/`
-
-> Nota: la ricerca ricetta usa un proxy pubblico (AllOrigins) solo per l’MVP. In produzione valuta un endpoint tuo.
-
-## Licenza
-MIT
+> Tip: se la pagina non aggiorna subito, aggiungi `?v=4-lite` all’URL o svuota la cache del browser.
