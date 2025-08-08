@@ -1,12 +1,11 @@
-# Tempi Cottura — V7
+# Tempi Cottura — V7.1
 
-- **Forno** e **Airfryer** affiancati, selezione cliccando sull’immagine
-- Metodo selezionato con **contorno verde**
-- **Stellina preferiti**: arancione scuro visibile; non selezionata = contorno bianco senza riempimento
-- Dropdown piatti con font più grande
-- Bottoni: **Start verde**, quando attivo diventa **Pausa rosso**. Reset separato
-- Pulsante **Condividi** con icona
-- Obiettivo layout: tutto in una schermata, ridotte altezze immagini/padding
+- Start/Pausa grandi ai lati del timer, Reset accanto, Condividi in basso
+- Condivisione stato timer via URL (dish, method, mode, start, dur) → apertura sincronizzata
+- Forno/Airfryer affiancati, selezione via click con bordo verde
+- Stella preferiti: contorno bianco (off) / arancione scuro (on)
+- Dropdown piatti font grande
+- Timer con allarme 10s + vibrazione
 
 ## Pubblicazione
-Carica i file nel branch Pages. Se non vedi aggiornamenti, apri con `?v=7` per forzare il refresh cache.
+Carica i file nel branch Pages. Forza refresh con `?v=7.1` se serve.
