@@ -1,7 +1,7 @@
 {
   "name": "tempi-cottura",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "cap:init": "npx cap init TempiCottura com.lunarossa.tempicottura --web-dir=.",
     "cap:add:android": "npx cap add android",
