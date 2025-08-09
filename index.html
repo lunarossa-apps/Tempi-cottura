@@ -17,7 +17,7 @@
   <main class="container">
     <section class="card">
       <label for="dishSel" class="inline">Piatto</label>
-      <select id="dishSel" class="big-select" aria-label="Seleziona piatto"></select>
+      <select id="dishSel" class="big-select"></select>
     </section>
 
     <section class="card">
@@ -34,7 +34,7 @@
 
       <div class="air-row compact" id="airRow" hidden>
         <label for="airModeSel" class="inline">Modalità</label>
-        <select id="airModeSel" class="compact-select" aria-label="Modalità Airfryer">
+        <select id="airModeSel" class="compact-select">
           <option value="potente">Potente</option>
           <option value="standard">Standard (+2 min)</option>
         </select>
@@ -48,16 +48,16 @@
     <section class="timer card">
       <div class="timer-row">
         <button id="start" class="primary start bigbtn">Start</button>
-        <div id="display" class="timer-display" aria-live="polite">00:00</div>
+        <div id="display" class="timer-display">00:00</div>
         <button id="reset" class="ghost bigbtn">Reset</button>
       </div>
       <div class="time-row compact center">
         <label for="minutes" class="inline">Minuti</label>
-        <input type="number" id="minutes" min="0" step="1" value="0" inputmode="numeric">
-        <button id="minus1" class="ghost smallbtn" aria-label="Togli un minuto">-1</button>
-        <button id="plus1" class="ghost smallbtn" aria-label="Aggiungi un minuto">+1</button>
+        <input type="number" id="minutes" min="0" step="1" value="0">
+        <button id="minus1" class="ghost smallbtn">-1</button>
+        <button id="plus1" class="ghost smallbtn">+1</button>
       </div>
-      <button id="share" class="share full" aria-label="Condividi timer">
+      <button id="share" class="share full">
         <span class="share-icn" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="18" height="18"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a2.5 2.5 0 000-1.39l7.02-4.11A2.99 2.99 0 0018 7.91a3 3 0 10-3-3c0 .23.03.45.08.66l-7.02 4.11a3 3 0 100 4.64l7.02 4.11c-.05.21-.08.43-.08.66a3 3 0 103-3z" fill="currentColor"/></svg>
         </span>
@@ -70,7 +70,7 @@
   </main>
 
   <!-- SETTINGS PANEL -->
-  <div id="settingsPanel" class="sheet hidden hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+  <div id="settingsPanel" class="sheet hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="sheet-body">
       <div class="sheet-head">
         <h2 id="settingsTitle">Impostazioni</h2>
