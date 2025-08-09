@@ -1,38 +1,111 @@
-// Tempi Cottura v7.7.6 — stable core + Settings + DDG recipe + share sync (refactored)
+// Tempi Cottura v7.7.6-langfix — full i18n for UI + dishes, persisted language, DDG locale + share text
 (() => {
-  /* ---------- Utilities ---------- */
   const qs = (sel, p=document) => p.querySelector(sel);
   const on = (el, ev, fn) => el.addEventListener(ev, fn);
 
   /* ---------- Language / i18n ---------- */
-const LANG_KEY='tc-lang';
-const LANGS=['it','en','es','pt','de'];
-const flags={ it:'🇮🇹', en:'🇬🇧', es:'🇪🇸', pt:'🇵🇹', de:'🇩🇪' };
-const ddgKl = { it:'it-it', en:'us-en', es:'es-es', pt:'pt-pt', de:'de-de' };
-const methodWords = {
-  it:{ forno:'forno', airfryer:'friggitrice ad aria' },
-  en:{ forno:'oven', airfryer:'air fryer' },
-  es:{ forno:'horno', airfryer:'freidora de aire' },
-  pt:{ forno:'forno', airfryer:'airfryer' },
-  de:{ forno:'Backofen', airfryer:'Heißluftfritteuse' }
-};
-const recipeWord = { it:'ricetta', en:'recipe', es:'receta', pt:'receita', de:'rezept' };
-const messages = {
-  it:{ share:(m,d,u)=>`Ti è stato condiviso un Timer per ${m} minuti relativo alla preparazione di ${d}. Clicca per seguire il timer: ${u}` },
-  en:{ share:(m,d,u)=>`A ${m}-minute timer was shared for ${d}. Tap to follow it: ${u}` },
-  es:{ share:(m,d,u)=>`Se compartió un temporizador de ${m} minutos para ${d}. Pulsa para seguirlo: ${u}` },
-  pt:{ share:(m,d,u)=>`Foi partilhado um temporizador de ${m} minutos para ${d}. Toque para seguir: ${u}` },
-  de:{ share:(m,d,u)=>`Ein ${m}-Minuten-Timer für ${d} wurde geteilt. Tippe zum Folgen: ${u}` }
-};
-function detectLang(){
-  const stored = localStorage.getItem(LANG_KEY);
-  if (stored && LANGS.includes(stored)) return stored;
-  const n = (navigator.language||'en').toLowerCase();
-  const guess = n.startsWith('it')?'it': n.startsWith('es')?'es': n.startsWith('pt')?'pt': n.startsWith('de')?'de':'en';
-  return guess;
-}
-let lang = detectLang();
-/* ---------- Theme ---------- */
+  const LANG_KEY='tc-lang';
+  const LANGS=['it','en','es','pt','de'];
+  const flags={ it:'🇮🇹', en:'🇬🇧', es:'🇪🇸', pt:'🇵🇹', de:'🇩🇪' };
+
+  const detectLang = () => {
+    const stored = localStorage.getItem(LANG_KEY);
+    if (stored && LANGS.includes(stored)) return stored;
+    const n = (navigator.language||'en').toLowerCase();
+    if (n.startsWith('it')) return 'it';
+    if (n.startsWith('es')) return 'es';
+    if (n.startsWith('pt')) return 'pt';
+    if (n.startsWith('de')) return 'de';
+    return 'en';
+  };
+  let lang = detectLang();
+
+  const UI = {
+    it:{ title:'Tempi Cottura', dish:'Piatto', oven:'Forno', air:'Airfryer', mode:'Modalità', power:'Potente', standard:'Standard (+2 min)',
+         minutes:'Minuti', start:'Start', pause:'Pausa', reset:'Reset',
+         shareBtn:'Condividi timer', shareHint:'Condividendo, chi riceve vedrà il timer partire dal momento dell’invio con i minuti selezionati.',
+         recipe:'Ricetta (apri ricerca)' },
+    en:{ title:'Cook Times', dish:'Dish', oven:'Oven', air:'Airfryer', mode:'Mode', power:'Powerful', standard:'Standard (+2 min)',
+         minutes:'Minutes', start:'Start', pause:'Pause', reset:'Reset',
+         shareBtn:'Share timer', shareHint:'When you share, the recipient sees the timer already running with your selected minutes.',
+         recipe:'Recipe (open search)' },
+    es:{ title:'Tiempos de Cocción', dish:'Plato', oven:'Horno', air:'Freidora de aire', mode:'Modo', power:'Potente', standard:'Estándar (+2 min)',
+         minutes:'Minutos', start:'Inicio', pause:'Pausa', reset:'Reiniciar',
+         shareBtn:'Compartir temporizador', shareHint:'Al compartir, el destinatario verá el temporizador en marcha con los minutos seleccionados.',
+         recipe:'Receta (abrir búsqueda)' },
+    pt:{ title:'Tempos de Cozedura', dish:'Prato', oven:'Forno', air:'Airfryer', mode:'Modo', power:'Potente', standard:'Normal (+2 min)',
+         minutes:'Minutos', start:'Iniciar', pause:'Pausar', reset:'Repor',
+         shareBtn:'Partilhar temporizador', shareHint:'Ao partilhar, o destinatário verá o temporizador a correr com os minutos selecionados.',
+         recipe:'Receita (abrir pesquisa)' },
+    de:{ title:'Garzeiten', dish:'Gericht', oven:'Ofen', air:'Heißluftfritteuse', mode:'Modus', power:'Leistungsstark', standard:'Standard (+2 Min)',
+         minutes:'Minuten', start:'Start', pause:'Pause', reset:'Zurücksetzen',
+         shareBtn:'Timer teilen', shareHint:'Beim Teilen sieht der Empfänger den Timer bereits mit deinen Minuten laufen.',
+         recipe:'Rezept (Suche öffnen)' }
+  };
+
+  const DISH_IDS=['arancini_riso','lasagne','pizza_margherita','patate_forno','parmigiana_melanzane','pollo_fritto','patatine_fritte','bastoncini_pesce','sofficini','cordon_bleu','polpette_carne','cotolette_pollo','crocchette_patate','calamari_fritti','verdure_grigliate','pane_casereccio','crostata_marmellata','cannelloni_ricotta_spinaci','pizza_surgelata','pizza_tonda'];
+
+  const DISH_LABELS = {
+    it:{
+      arancini_riso:'Arancini di riso', lasagne:'Lasagne', pizza_margherita:'Pizza margherita', patate_forno:'Patate al forno',
+      parmigiana_melanzane:'Parmigiana di melanzane', pollo_fritto:'Pollo fritto', patatine_fritte:'Patatine fritte',
+      bastoncini_pesce:'Bastoncini di pesce', sofficini:'Sofficini', cordon_bleu:'Cordon Bleu', polpette_carne:'Polpette di carne',
+      cotolette_pollo:'Cotolette di pollo', crocchette_patate:'Crocchette di patate', calamari_fritti:'Calamari fritti',
+      verdure_grigliate:'Verdure grigliate', pane_casereccio:'Pane casereccio', crostata_marmellata:'Crostata di marmellata',
+      cannelloni_ricotta_spinaci:'Cannelloni ricotta e spinaci', pizza_surgelata:'Pizza surgelata', pizza_tonda:'Pizza tonda'
+    },
+    en:{
+      arancini_riso:'Arancini (rice balls)', lasagne:'Lasagna', pizza_margherita:'Margherita pizza', patate_forno:'Baked potatoes',
+      parmigiana_melanzane:'Eggplant Parmigiana', pollo_fritto:'Fried chicken', patatine_fritte:'French fries',
+      bastoncini_pesce:'Fish sticks', sofficini:'Sofficini', cordon_bleu:'Cordon Bleu', polpette_carne:'Meatballs',
+      cotolette_pollo:'Chicken cutlets', crocchette_patate:'Potato croquettes', calamari_fritti:'Fried calamari',
+      verdure_grigliate:'Grilled vegetables', pane_casereccio:'Homemade bread', crostata_marmellata:'Jam tart',
+      cannelloni_ricotta_spinaci:'Ricotta & spinach cannelloni', pizza_surgelata:'Frozen pizza', pizza_tonda:'Round pizza'
+    },
+    es:{
+      arancini_riso:'Arancini (bolas de arroz)', lasagne:'Lasaña', pizza_margherita:'Pizza margarita', patate_forno:'Patatas al horno',
+      parmigiana_melanzane:'Parmigiana de berenjena', pollo_fritto:'Pollo frito', patatine_fritte:'Papas fritas',
+      bastoncini_pesce:'Palitos de pescado', sofficini:'Sofficini', cordon_bleu:'Cordon Bleu', polpette_carne:'Albóndigas de carne',
+      cotolette_pollo:'Milanesas de pollo', crocchette_patate:'Croquetas de patata', calamari_fritti:'Calamares fritos',
+      verdure_grigliate:'Verduras a la parrilla', pane_casereccio:'Pan casero', crostata_marmellata:'Tarta de mermelada',
+      cannelloni_ricotta_spinaci:'Canelones de ricota y espinaca', pizza_surgelata:'Pizza congelada', pizza_tonda:'Pizza redonda'
+    },
+    pt:{
+      arancini_riso:'Arancini (bolas de arroz)', lasagne:'Lasanha', pizza_margherita:'Pizza margherita', patate_forno:'Batatas no forno',
+      parmigiana_melanzane:'Parmigiana de beringela', pollo_fritto:'Frango frito', patatine_fritte:'Batatas fritas',
+      bastoncini_pesce:'Palitos de peixe', sofficini:'Sofficini', cordon_bleu:'Cordon Bleu', polpette_carne:'Almôndegas',
+      cotolette_pollo:'Panados de frango', crocchette_patate:'Croquetes de batata', calamari_fritti:'Lulas fritas',
+      verdure_grigliate:'Legumes grelhados', pane_casereccio:'Pão caseiro', crostata_marmellata:'Tarte de compota',
+      cannelloni_ricotta_spinaci:'Canelones de ricota e espinafres', pizza_surgelata:'Pizza congelada', pizza_tonda:'Pizza redonda'
+    },
+    de:{
+      arancini_riso:'Arancini (Reisbällchen)', lasagne:'Lasagne', pizza_margherita:'Margherita-Pizza', patate_forno:'Ofenkartoffeln',
+      parmigiana_melanzane:'Auberginen-Parmigiana', pollo_fritto:'Frittiertes Hähnchen', patatine_fritte:'Pommes frites',
+      bastoncini_pesce:'Fischstäbchen', sofficini:'Sofficini', cordon_bleu:'Cordon Bleu', polpette_carne:'Fleischbällchen',
+      cotolette_pollo:'Hähnchenschnitzel', crocchette_patate:'Kartoffelkroketten', calamari_fritti:'Frittierte Calamari',
+      verdure_grigliate:'Gegrilltes Gemüse', pane_casereccio:'Hausgemachtes Brot', crostata_marmellata:'Marmeladentarte',
+      cannelloni_ricotta_spinaci:'Cannelloni mit Ricotta und Spinat', pizza_surgelata:'Tiefkühlpizza', pizza_tonda:'Runde Pizza'
+    }
+  };
+
+  const ddgKl = { it:'it-it', en:'us-en', es:'es-es', pt:'pt-pt', de:'de-de' };
+  const methodWords = {
+    it:{ forno:'forno', airfryer:'friggitrice ad aria' },
+    en:{ forno:'oven', airfryer:'air fryer' },
+    es:{ forno:'horno', airfryer:'freidora de aire' },
+    pt:{ forno:'forno', airfryer:'airfryer' },
+    de:{ forno:'Backofen', airfryer:'Heißluftfritteuse' }
+  };
+  const recipeWord = { it:'ricetta', en:'recipe', es:'receta', pt:'receita', de:'rezept' };
+  const messages = {
+    it:{ share:(m,d,u)=>`Ti è stato condiviso un Timer per ${m} minuti relativo alla preparazione di ${d}. Clicca per seguire il timer: ${u}` },
+    en:{ share:(m,d,u)=>`A ${m}-minute timer was shared for ${d}. Tap to follow it: ${u}` },
+    es:{ share:(m,d,u)=>`Se compartió un temporizador de ${m} minutos para ${d}. Pulsa para seguirlo: ${u}` },
+    pt:{ share:(m,d,u)=>`Foi partilhado um temporizador de ${m} minutos para ${d}. Toque para seguir: ${u}` },
+    de:{ share:(m,d,u)=>`Ein ${m}-Minuten-Timer für ${d} wurde geteilt. Tippe zum Folgen: ${u}` }
+  };
+
+  /* ---------- Theme ---------- */
   const THEME_KEY='tc-theme';
   const THEMES={
     nero:{bg:'#0b0b0c',card:'#151518',fg:'#f9fafb',muted:'#9ca3af',border:'#26262a',primary:'#22c55e',danger:'#ef4444',btnText:'#0b0b0c',icon:'#9ca3af'},
@@ -54,20 +127,7 @@ let lang = detectLang();
   };
   applyTheme(localStorage.getItem(THEME_KEY)||'nero');
 
-  /* ---------- Data ---------- */
-  const DISHES = [
-    'arancini_riso','lasagne','pizza_margherita','patate_forno','parmigiana_melanzane','pollo_fritto','patatine_fritte',
-    'bastoncini_pesce','sofficini','cordon_bleu','polpette_carne','cotolette_pollo','crocchette_patate','calamari_fritti',
-    'verdure_grigliate','pane_casereccio','crostata_marmellata','cannelloni_ricotta_spinaci','pizza_surgelata','pizza_tonda'
-  ];
-  const LABELS = {
-    arancini_riso:'Arancini di riso', lasagne:'Lasagne', pizza_margherita:'Pizza margherita', patate_forno:'Patate al forno',
-    parmigiana_melanzane:'Parmigiana di melanzane', pollo_fritto:'Pollo fritto', patatine_fritte:'Patatine fritte',
-    bastoncini_pesce:'Bastoncini di pesce', sofficini:'Sofficini', cordon_bleu:'Cordon Bleu', polpette_carne:'Polpette di carne',
-    cotolette_pollo:'Cotolette di pollo', crocchette_patate:'Crocchette di patate', calamari_fritti:'Calamari fritti',
-    verdure_grigliate:'Verdure grigliate', pane_casereccio:'Pane casereccio', crostata_marmellata:'Crostata di marmellata',
-    cannelloni_ricotta_spinaci:'Cannelloni ricotta e spinaci', pizza_surgelata:'Pizza surgelata', pizza_tonda:'Pizza tonda'
-  };
+  /* ---------- Data / Presets ---------- */
   const PRESETS = {
     forno:{ lasagne:35, pizza_margherita:12, pane_casereccio:40, parmigiana_melanzane:35, patate_forno:45, cannelloni_ricotta_spinaci:35,
       crostata_marmellata:30, pizza_surgelata:14, pizza_tonda:12, pollo_fritto:25, patatine_fritte:25, bastoncini_pesce:15, sofficini:18,
@@ -81,7 +141,7 @@ let lang = detectLang();
   const S = {
     method:'forno',
     airMode: localStorage.getItem('tc-air-mode') || 'potente',
-    dish: DISHES[0],
+    dish: DISH_IDS[0],
     running:false, timer:null, endAt:null, seconds:0
   };
 
@@ -99,6 +159,15 @@ let lang = detectLang();
   const plus1Btn = qs('#plus1');
   const shareBtn = qs('#share');
   const recipeLink = qs('#recipeLink');
+  const appTitleEl = qs('.appbar h1');
+  const lblDish = qs('label[for="dishSel"]');
+  const lblMode = qs('label[for="airModeSel"]');
+  const lblMinutes = qs('label[for="minutes"]');
+  const btnShareText = qs('#btnShareText');
+  const shareHint = qs('#shareHint');
+  const ovenTitle = qs('#cardForno .method-title');
+  const airTitle = qs('#cardAir .method-title');
+
   const btnSettings = qs('#btnSettings');
   const settingsPanel = qs('#settingsPanel');
   const closeSettings = qs('#closeSettings');
@@ -122,7 +191,36 @@ let lang = detectLang();
     o.start(now); o.stop(now+10);
   };
 
-  /* ---------- Helpers ---------- */
+  /* ---------- UI apply texts ---------- */
+  const applyTexts = () => {
+    const U = UI[lang] || UI.en;
+    document.documentElement.lang = lang;
+    appTitleEl.textContent = U.title;
+    lblDish.textContent = U.dish;
+    ovenTitle.textContent = U.oven;
+    airTitle.textContent = U.air;
+    lblMode.textContent = U.mode;
+    airModeSel.options[0].text = U.power;
+    airModeSel.options[1].text = U.standard;
+    lblMinutes.textContent = U.minutes;
+    startBtn.textContent = S.running ? U.pause : U.start;
+    resetBtn.textContent = U.reset;
+    btnShareText.textContent = U.shareBtn;
+    shareHint.textContent = U.shareHint;
+    recipeLink.textContent = '🔎 ' + U.recipe;
+  };
+
+  /* ---------- Dishes populate (by language) ---------- */
+  const populateDishes = () => {
+    const labels = DISH_LABELS[lang] || DISH_LABELS.en;
+    const prev = S.dish;
+    const list = DISH_IDS.map(id=>({id,label:labels[id]||id})).sort((a,b)=>a.label.localeCompare(b.label));
+    dishSel.innerHTML = list.map(d=>`<option value="${d.id}">${d.label}</option>`).join('');
+    S.dish = list.find(x=>x.id===prev)?.id || list[0].id;
+    dishSel.value = S.dish;
+  };
+
+  /* ---------- Methods & helpers ---------- */
   const render = () => {
     const mm = String(Math.floor(S.seconds/60)).padStart(2,'0');
     const ss = String(S.seconds%60).padStart(2,'0');
@@ -138,10 +236,11 @@ let lang = detectLang();
     render();
   };
   const updateRecipeLink = () => {
-    const label = LABELS[S.dish] || S.dish;
-    const words = `${label} ${recipeWord[lang]||'recipe'} ${methodWords[lang]?.[S.method]||''}`.trim();
+    const labels = DISH_LABELS[lang] || DISH_LABELS.en;
+    const label = labels[S.dish] || S.dish;
+    const words = `${label} ${( {it:'ricetta',en:'recipe',es:'receta',pt:'receita',de:'rezept'} )[lang] || 'recipe'} ${( {it:{forno:'forno',airfryer:'friggitrice ad aria'},en:{forno:'oven',airfryer:'air fryer'},es:{forno:'horno',airfryer:'freidora de aire'},pt:{forno:'forno',airfryer:'airfryer'},de:{forno:'Backofen',airfryer:'Heißluftfritteuse'}} )[lang]?.[S.method]||''}`.trim();
     const q = encodeURIComponent(words);
-    const kl = ddgKl[lang] || 'us-en';
+    const kl = ({ it:'it-it', en:'us-en', es:'es-es', pt:'pt-pt', de:'de-de' })[lang] || 'us-en';
     recipeLink.href = `https://duckduckgo.com/?q=${q}&kl=${kl}`;
   };
   const setSelected = (air) => {
@@ -153,13 +252,13 @@ let lang = detectLang();
       airRow.hidden = true; S.method='forno';
     }
     applyPreset(); updateRecipeLink();
+    applyTexts();
   };
 
-  /* ---------- Populate dishes ---------- */
-  const list = DISHES.map(id => ({id, label: LABELS[id]})).sort((a,b)=>a.label.localeCompare(b.label));
-  dishSel.innerHTML = list.map(d=>`<option value="${d.id}">${d.label}</option>`).join('');
-  S.dish = list[0].id;
-  dishSel.value = S.dish;
+  /* ---------- Populate / init ---------- */
+  populateDishes();
+  applyTexts();
+  setSelected(false); // default forno
 
   /* ---------- Events ---------- */
   on(cardForno,'click', ()=> setSelected(false));
@@ -174,6 +273,7 @@ let lang = detectLang();
   on(minutesInput,'change', ()=>{ const v=Math.max(0,parseInt(minutesInput.value||'0',10)); minutesInput.value=v; S.seconds=v*60; S.endAt=null; render(); });
 
   on(startBtn,'click', async()=>{
+    const U = UI[lang] || UI.en;
     if(!S.running){
       try{ await initAudio(); }catch{}
       if(!S.seconds) S.seconds = Math.max(0, parseInt(minutesInput.value||'0',10)*60);
@@ -181,17 +281,17 @@ let lang = detectLang();
       S.timer = setInterval(()=>{
         S.seconds = Math.max(0, Math.round((S.endAt-Date.now())/1000));
         render();
-        if(S.seconds<=0){ clearInterval(S.timer); S.timer=null; S.running=false; startBtn.textContent='Start'; startBtn.classList.remove('danger'); startBtn.classList.add('primary'); try{ alarm10s(); }catch{} if(navigator.vibrate) navigator.vibrate([300,150,300,150,300]); }
+        if(S.seconds<=0){ clearInterval(S.timer); S.timer=null; S.running=false; startBtn.textContent=U.start; startBtn.classList.remove('danger'); startBtn.classList.add('primary'); try{ alarm10s(); }catch{} if(navigator.vibrate) navigator.vibrate([300,150,300,150,300]); }
       }, 250);
-      S.running=true; startBtn.textContent='Pausa'; startBtn.classList.remove('primary'); startBtn.classList.add('danger');
+      S.running=true; startBtn.textContent=U.pause; startBtn.classList.remove('primary'); startBtn.classList.add('danger');
     }else{
       clearInterval(S.timer); S.timer=null;
       if(S.endAt){ S.seconds = Math.max(0, Math.round((S.endAt-Date.now())/1000)); S.endAt=null; }
-      S.running=false; startBtn.textContent='Start'; startBtn.classList.remove('danger'); startBtn.classList.add('primary');
+      S.running=false; startBtn.textContent=U.start; startBtn.classList.remove('danger'); startBtn.classList.add('primary');
     }
   });
 
-  on(resetBtn,'click', ()=>{ if(S.timer) clearInterval(S.timer); S.timer=null; S.running=false; startBtn.textContent='Start'; startBtn.className='primary start bigbtn'; applyPreset(); });
+  on(resetBtn,'click', ()=>{ if(S.timer) clearInterval(S.timer); S.timer=null; S.running=false; startBtn.className='primary start bigbtn'; applyPreset(); applyTexts(); });
 
   /* ---------- Share (sync) ---------- */
   const b64enc = obj => {
@@ -202,10 +302,17 @@ let lang = detectLang();
   on(shareBtn,'click', async()=>{
     const totalSeconds = Math.max(0, parseInt(minutesInput.value||'0',10)*60);
     const startedAt = S.endAt ? (S.endAt - totalSeconds*1000) : Date.now();
-    const payload = { dishId:S.dish, dish:LABELS[S.dish], method:S.method, mode:(S.method==='airfryer'? S.airMode:''), start:startedAt, dur: totalSeconds };
+    const labels = DISH_LABELS[lang] || DISH_LABELS.en;
+    const payload = { dishId:S.dish, dish:labels[S.dish]||S.dish, method:S.method, mode:(S.method==='airfryer'? S.airMode:''), start:startedAt, dur: totalSeconds };
     const url = `${location.origin}${location.pathname}#${b64enc(payload)}`;
     const mins = Math.max(1, Math.round(totalSeconds/60));
-    const text = (messages[lang]||messages.en).share(mins, LABELS[S.dish], url);
+    const text = ({
+      it:(m,d,u)=>`Ti è stato condiviso un Timer per ${m} minuti relativo alla preparazione di ${d}. Clicca per seguire il timer: ${u}`,
+      en:(m,d,u)=>`A ${m}-minute timer was shared for ${d}. Tap to follow it: ${u}`,
+      es:(m,d,u)=>`Se compartió un temporizador de ${m} minutos para ${d}. Pulsa para seguirlo: ${u}`,
+      pt:(m,d,u)=>`Foi partilhado um temporizador de ${m} minutos para ${d}. Toque para seguir: ${u}`,
+      de:(m,d,u)=>`Ein ${m}-Minuten-Timer für ${d} wurde geteilt. Tippe zum Folgen: ${u}`
+    }[lang]||(({en:(m,d,u)=>`A ${m}-minute timer was shared for ${d}. Tap to follow it: ${u}`}).en))(mins, labels[S.dish]||S.dish, url);
     const isSecure = (location.protocol==='https:')||(location.hostname==='localhost')||(location.hostname==='127.0.0.1');
     try{ if(isSecure && navigator.share){ await navigator.share({text}); return; } throw 0; }
     catch{ try{ await navigator.clipboard.writeText(text); alert('Link copiato negli appunti'); }
@@ -225,7 +332,7 @@ let lang = detectLang();
     let data; try{ data=b64dec(hash); }catch{ return; }
     const { dishId, method, mode, start, dur } = data||{};
     if(!dishId || !method || !start || !dur) return;
-    S.dish = dishId; dishSel.value = S.dish;
+    S.dish = dishId; populateDishes(); dishSel.value = S.dish;
     setSelected(method==='airfryer');
     if(method==='airfryer' && mode){ S.airMode = mode; airModeSel.value = mode; }
     applyPreset(); updateRecipeLink();
@@ -236,36 +343,36 @@ let lang = detectLang();
     S.timer = setInterval(()=>{
       S.seconds = Math.max(0, Math.round((S.endAt-Date.now())/1000));
       render();
-      if(S.seconds<=0){ clearInterval(S.timer); S.timer=null; S.running=false; startBtn.textContent='Start'; startBtn.classList.remove('danger'); startBtn.classList.add('primary'); try{ alarm10s(); }catch{} if(navigator.vibrate) navigator.vibrate([300,150,300,150,300]); }
+      const U = UI[lang]||UI.en;
+      if(S.seconds<=0){ clearInterval(S.timer); S.timer=null; S.running=false; startBtn.textContent=U.start; startBtn.classList.remove('danger'); startBtn.classList.add('primary'); try{ alarm10s(); }catch{} if(navigator.vibrate) navigator.vibrate([300,150,300,150,300]); }
     }, 250);
-    S.running=true; startBtn.textContent='Pausa'; startBtn.classList.remove('primary'); startBtn.classList.add('danger');
+    S.running=true; startBtn.textContent=(UI[lang]||UI.en).pause; startBtn.classList.remove('primary'); startBtn.classList.add('danger');
   };
 
   /* ---------- Settings ---------- */
-  on(btnSettings,'click', ()=> settingsPanel.classList.remove('hidden'));
-  on(closeSettings,'click', ()=> settingsPanel.classList.add('hidden'));
-  on(settingsPanel,'click', e=>{ if(e.target===settingsPanel) settingsPanel.classList.add('hidden'); });
-  on(themeGrid,'click', e=>{ const b=e.target.closest('button[data-theme]'); if(!b) return; applyTheme(b.dataset.theme); });
-
   const rebuildFlags = () => {
     flagsGrid.innerHTML='';
     LANGS.forEach(code=>{
       const b=document.createElement('button');
       b.className = 'flagchip' + (code===lang?' active':'');
       b.innerHTML = `<span>${flags[code]}</span><span>${code.toUpperCase()}</span>`;
-      b.addEventListener('click', ()=>{ lang=code; localStorage.setItem(LANG_KEY,code); rebuildFlags(); updateRecipeLink(); });
+      b.addEventListener('click', ()=>{
+        lang=code; localStorage.setItem(LANG_KEY,code);
+        applyTexts(); populateDishes(); updateRecipeLink(); rebuildFlags();
+      });
       flagsGrid.appendChild(b);
     });
   };
 
-/* ---------- Bootstrap ---------- */
-  // --- Settings safety ---
-  settingsPanel.classList.add('hidden'); // ensure hidden at boot, even if cache served old CSS
-  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') settingsPanel.classList.add('hidden'); });
+  on(btnSettings,'click', ()=> settingsPanel.classList.remove('hidden'));
+  on(closeSettings,'click', ()=> settingsPanel.classList.add('hidden'));
+  on(settingsPanel,'click', e=>{ if(e.target===settingsPanel) settingsPanel.classList.add('hidden'); });
+  on(themeGrid,'click', e=>{ const b=e.target.closest('button[data-theme]'); if(!b) return; applyTheme(b.dataset.theme); });
 
-  setSelected(false);         // default forno
-  updateRecipeLink();
+  /* ---------- Bootstrap ---------- */
   rebuildFlags();
+  updateRecipeLink();
   initFromHash();
-  render();
+  // safety: ensure settings closed at boot
+  settingsPanel?.classList?.add('hidden');
 })();
