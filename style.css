@@ -9,6 +9,8 @@ html,body{height:100%}
 body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--fg)}
 .appbar{position:sticky;top:0;background:rgba(0,0,0,0.15);backdrop-filter:saturate(120%) blur(6px);border-bottom:1px solid var(--border);padding:10px 14px;z-index:10;display:flex;align-items:center;gap:10px}
 .appbar h1{margin:0;font-size:18px}
+.flagbar{margin-left:auto;display:flex;gap:6px}
+.flagbtn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:6px 8px;color:var(--fg);cursor:pointer}
 .icon-btn{background:transparent;border:1px solid var(--border);color:var(--icon);border-radius:10px;padding:6px;display:inline-grid;place-items:center;cursor:pointer}
 .container{max-width:900px;margin:0 auto;padding:10px}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:10px}
@@ -58,6 +60,9 @@ button.share.full{width:100%}
 .settings-body{padding:10px 12px}
 .setting-row{margin-bottom:10px}
 .theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.flags-grid{display:flex;gap:8px;flex-wrap:wrap}
+.flagchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;padding:6px 10px;background:#0f0f12;color:var(--fg);cursor:pointer}
+.flagchip.active{outline:2px solid var(--green)}
 .theme-swatch{display:flex;flex-direction:column;align-items:center;gap:6px;background:#0f0f12;border:1px solid var(--border);border-radius:10px;padding:8px}
 .theme-dot{width:26px;height:26px;border-radius:50%;border:2px solid #fff}
 .theme-label{font-size:12px;color:var(--fg)}

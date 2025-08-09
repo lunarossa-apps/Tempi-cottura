@@ -1,4 +1,141 @@
-// Tempi Cottura - v7.4.2 (core fixes)
+// Tempi Cottura - v7.6 (core flags + 5 languages)
+/* ====== i18n ====== */
+const LANG_KEY = 'tc-lang';
+const flags = {
+  it: '🇮🇹', en: '🇬🇧', es: '🇪🇸', pt: '🇵🇹', de: '🇩🇪'
+};
+const messages = {
+  it: {
+    title: 'Tempi Cottura', dish: 'Piatto',
+    selectHint: 'Seleziona un piatto e poi scegli il metodo di cottura.',
+    oven: 'Forno', air: 'Airfryer', mode: 'Modalità',
+    power: 'Potente', standard: 'Standard (+2 min)',
+    minutes: 'Minuti', start: 'Start', pause: 'Pausa', reset: 'Reset',
+    shareBtn: 'Condividi timer',
+    shareText: (m, dish, url)=>`Ti è stato condiviso un Timer per ${m} minuti relativo alla preparazione di ${dish}. Clicca per seguire il timer: ${url}`,
+    settings: 'Impostazioni', theme: 'Tema colore', language: 'Lingua', quickFlags: 'Selettore rapido',
+    auto: 'Auto (device)', footer: 'App developed by LunaRossa Ltd — Copyright LunaRossa Ltd London 2025',
+    audioBanner: 'Abilita suono allarme', allow: 'Consenti',
+    linkCopied: 'Link copiato negli appunti.', copyDone: 'Copia eseguita.',
+    undefTime: (n, m)=>`Tempo non definito per "${n}" (${m}).`
+  },
+  en: {
+    title: 'Cook Times', dish: 'Dish',
+    selectHint: 'Pick a dish, then choose the cooking method.',
+    oven: 'Oven', air: 'Airfryer', mode: 'Mode',
+    power: 'Powerful', standard: 'Standard (+2 min)',
+    minutes: 'Minutes', start: 'Start', pause: 'Pause', reset: 'Reset',
+    shareBtn: 'Share timer',
+    shareText: (m, dish, url)=>`A ${m}-minute timer was shared for ${dish}. Tap to follow it: ${url}`,
+    settings: 'Settings', theme: 'Theme color', language: 'Language', quickFlags: 'Quick selector',
+    auto: 'Auto (device)', footer: 'App developed by LunaRossa Ltd — Copyright LunaRossa Ltd London 2025',
+    audioBanner: 'Enable alarm sound', allow: 'Allow',
+    linkCopied: 'Link copied to clipboard.', copyDone: 'Copied.',
+    undefTime: (n, m)=>`Time not defined for "${n}" (${m}).`
+  },
+  es: {
+    title: 'Tiempos de Cocción', dish: 'Plato',
+    selectHint: 'Elige un plato y después el método de cocción.',
+    oven: 'Horno', air: 'Freidora de aire', mode: 'Modo',
+    power: 'Potente', standard: 'Estándar (+2 min)',
+    minutes: 'Minutos', start: 'Inicio', pause: 'Pausa', reset: 'Reiniciar',
+    shareBtn: 'Compartir temporizador',
+    shareText: (m, dish, url)=>`Se compartió un temporizador de ${m} minutos para ${dish}. Pulsa para seguirlo: ${url}`,
+    settings: 'Ajustes', theme: 'Color del tema', language: 'Idioma', quickFlags: 'Selector rápido',
+    auto: 'Auto (dispositivo)', footer: 'App developed by LunaRossa Ltd — Copyright LunaRossa Ltd London 2025',
+    audioBanner: 'Activar sonido de alarma', allow: 'Permitir',
+    linkCopied: 'Enlace copiado al portapapeles.', copyDone: 'Copiado.',
+    undefTime: (n, m)=>`Tiempo no definido para «${n}» (${m}).`
+  },
+  pt: {
+    title: 'Tempos de Cozedura', dish: 'Prato',
+    selectHint: 'Escolha um prato e depois o método de cozedura.',
+    oven: 'Forno', air: 'Airfryer', mode: 'Modo',
+    power: 'Potente', standard: 'Normal (+2 min)',
+    minutes: 'Minutos', start: 'Iniciar', pause: 'Pausar', reset: 'Repor',
+    shareBtn: 'Partilhar temporizador',
+    shareText: (m, dish, url)=>`Foi partilhado um temporizador de ${m} minutos para ${dish}. Toque para seguir: ${url}`,
+    settings: 'Definições', theme: 'Cor do tema', language: 'Idioma', quickFlags: 'Seletor rápido',
+    auto: 'Auto (dispositivo)', footer: 'App developed by LunaRossa Ltd — Copyright LunaRossa Ltd London 2025',
+    audioBanner: 'Ativar som do alarme', allow: 'Permitir',
+    linkCopied: 'Link copiado para a área de transferência.', copyDone: 'Copiado.',
+    undefTime: (n, m)=>`Tempo não definido para «${n}» (${m}).`
+  },
+  de: {
+    title: 'Garzeiten', dish: 'Gericht',
+    selectHint: 'Wähle ein Gericht und dann die Garmethode.',
+    oven: 'Ofen', air: 'Heißluftfritteuse', mode: 'Modus',
+    power: 'Leistungsvoll', standard: 'Standard (+2 Min)',
+    minutes: 'Minuten', start: 'Start', pause: 'Pause', reset: 'Zurücksetzen',
+    shareBtn: 'Timer teilen',
+    shareText: (m, dish, url)=>`Ein ${m}-Minuten-Timer für ${dish} wurde geteilt. Tippe, um ihm zu folgen: ${url}`,
+    settings: 'Einstellungen', theme: 'Designfarbe', language: 'Sprache', quickFlags: 'Schnellauswahl',
+    auto: 'Auto (Gerät)', footer: 'App developed by LunaRossa Ltd — Copyright LunaRossa Ltd London 2025',
+    audioBanner: 'Alarmton aktivieren', allow: 'Zulassen',
+    linkCopied: 'Link in die Zwischenablage kopiert.', copyDone: 'Kopiert.',
+    undefTime: (n, m)=>`Zeit für „${n}“ (${m}) nicht definiert.`
+  }
+};
+function detectLang(){
+  const pref = localStorage.getItem(LANG_KEY);
+  if (pref && pref !== 'auto') return pref;
+  const n = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  if (n.startsWith('it')) return 'it';
+  if (n.startsWith('es')) return 'es';
+  if (n.startsWith('pt')) return 'pt';
+  if (n.startsWith('de')) return 'de';
+  return 'en';
+}
+let lang = detectLang();
+function t(key, ...args){
+  const pack = messages[lang] || messages.en;
+  const val = pack[key];
+  return typeof val === 'function' ? val(...args) : val;
+}
+function applyTexts(){
+  document.documentElement.lang = lang;
+  document.getElementById('appTitle').textContent = t('title');
+  document.getElementById('lblDish').textContent = t('dish');
+  document.getElementById('hintSelect').textContent = t('selectHint');
+  document.getElementById('lblOven').textContent = t('oven');
+  document.getElementById('lblAir').textContent = t('air');
+  document.getElementById('lblMode').textContent = t('mode');
+  document.getElementById('optPower').textContent = t('power');
+  document.getElementById('optStandard').textContent = t('standard');
+  document.getElementById('lblMinutes').textContent = t('minutes');
+  document.getElementById('start').textContent = t('start');
+  document.getElementById('reset').textContent = t('reset');
+  document.getElementById('btnShareText').textContent = t('shareBtn');
+  document.getElementById('settingsTitle').textContent = t('settings');
+  document.getElementById('lblTheme').textContent = t('theme');
+  document.getElementById('lblLanguage').textContent = t('language');
+  document.getElementById('lblQuickFlags').textContent = t('quickFlags');
+  document.getElementById('footerText').textContent = t('footer');
+  const langSel = document.getElementById('langSel');
+  langSel.value = localStorage.getItem(LANG_KEY) || 'auto';
+  buildFlagBar(); buildFlagsGrid();
+}
+function buildFlagBar(){
+  const bar = document.getElementById('flagBar');
+  bar.innerHTML='';
+  ['it','en','es','pt','de'].forEach(code=>{
+    const b=document.createElement('button'); b.className='flagbtn'; b.textContent=flags[code]; b.title=code.toUpperCase();
+    b.addEventListener('click',()=>{ localStorage.setItem(LANG_KEY, code); lang=code; applyTexts(); });
+    bar.appendChild(b);
+  });
+}
+function buildFlagsGrid(){
+  const grid = document.getElementById('flagsGrid');
+  grid.innerHTML='';
+  const current = localStorage.getItem(LANG_KEY) || 'auto';
+  [['it','Italiano'],['en','English'],['es','Español'],['pt','Português'],['de','Deutsch']].forEach(([code,label])=>{
+    const chip=document.createElement('button'); chip.className='flagchip'; if (current===code) chip.classList.add('active');
+    chip.innerHTML = `<span>${flags[code]}</span><span>${label}</span>`;
+    chip.addEventListener('click',()=>{ localStorage.setItem(LANG_KEY, code); lang=code; applyTexts(); });
+    grid.appendChild(chip);
+  });
+}
+
 /* ====== Config ====== */
 const DISHES = [
   "Arancini di riso","Arrosto di maiale","Arrosto di vitello","Bastoncini di pesce","Calamari fritti",
@@ -40,7 +177,6 @@ const THEMES = {
   indaco: { bg:'#312e81', card:'#3730a3', fg:'#e0e7ff', muted:'#a5b4fc', border:'#4338ca', primary:'#22c55e', danger:'#ef4444', btnText:'#0b0b0c', icon:'#cbd5e1', light:false },
   grigio: { bg:'#111827', card:'#1f2937', fg:'#f9fafb', muted:'#9ca3af', border:'#374151', primary:'#22c55e', danger:'#ef4444', btnText:'#0b0b0c', icon:'#9ca3af', light:false }
 };
-
 function applyTheme(name){
   const t = THEMES[name] || THEMES.nero;
   const r = document.documentElement;
@@ -76,6 +212,7 @@ const btnSettings = document.getElementById('btnSettings');
 const settingsPanel = document.getElementById('settingsPanel');
 const closeSettings = document.getElementById('closeSettings');
 const themeGrid = document.getElementById('themeGrid');
+const langSel = document.getElementById('langSel');
 
 /* ====== State ====== */
 let method = 'forno';
@@ -108,8 +245,8 @@ function injectAudioPrompt(){
   const box = document.createElement('div');
   box.id = 'audioPrompt';
   box.className = 'audio-prompt';
-  box.innerHTML = `<span>🔔 Abilita suono allarme</span>
-                   <button id="enableAudio" class="primary smallbtn">Consenti</button>`;
+  box.innerHTML = `<span>${t('audioBanner')}</span>
+                   <button id="enableAudio" class="primary smallbtn">${t('allow')}</button>`;
   document.body.appendChild(box);
   document.getElementById('enableAudio').addEventListener('click', async ()=>{
     try { await initAudio(); } catch(_) {}
@@ -156,9 +293,9 @@ applyPreferredMethod();
 /* ====== Clicks ====== */
 cardForno.addEventListener('click', ()=>{ method='forno'; setSelected(cardForno, cardAir); applyPreset(); });
 cardAir.addEventListener('click', ()=>{ method='airfryer'; setSelected(cardAir, cardForno); applyPreset(); });
-favForno.addEventListener('click', (e)=>{ e.stopPropagation(); prefMethod='forno'; localStorage.setItem('tc-pref-method', prefMethod); favForno.classList.add('on'); favAir.classList.remove('on'); });
-favAir.addEventListener('click', (e)=>{ e.stopPropagation(); prefMethod='airfryer'; localStorage.setItem('tc-pref-method', prefMethod); favAir.classList.add('on'); favForno.classList.remove('on'); });
-airModeSel.addEventListener('change', ()=>{ airMode = airModeSel.value; localStorage.setItem('tc-air-mode', airMode); if (method==='airfryer') applyPreset(); });
+favForno.addEventListener('click', (e)=>{ e.stopPropagation(); prefMethod='forno'; localStorage.setItem(PREF_METHOD_KEY, prefMethod); favForno.classList.add('on'); favAir.classList.remove('on'); });
+favAir.addEventListener('click', (e)=>{ e.stopPropagation(); prefMethod='airfryer'; localStorage.setItem(PREF_METHOD_KEY, prefMethod); favAir.classList.add('on'); favForno.classList.remove('on'); });
+airModeSel.addEventListener('change', ()=>{ airMode = airModeSel.value; localStorage.setItem(AIR_MODE_KEY, airMode); if (method==='airfryer') applyPreset(); });
 dishSel.addEventListener('change', applyPreset);
 
 /* ====== Presets ====== */
@@ -166,7 +303,7 @@ function applyPreset(){
   const n = dishSel.value || DISHES[0];
   const map = method==='forno'? PRESETS.forno : PRESETS.airfryer;
   let mins = map[n];
-  if (mins===undefined){ alert(`Tempo non definito per "${n}" (${method}).`); startBtn.disabled=true; return; }
+  if (mins===undefined){ alert(t('undefTime', n, method)); startBtn.disabled=true; return; }
   if (method==='airfryer' && airMode==='standard') mins += 2;
   minutesInput.value = mins; secondsLeft = mins*60; endAt = null; startBtn.disabled=false; renderDisplay();
 }
@@ -198,18 +335,18 @@ startBtn.addEventListener('click', async ()=>{
     endAt = Date.now()+secondsLeft*1000;
     timerId = setInterval(tick,250);
     running = true;
-    startBtn.textContent = 'Pausa';
+    startBtn.textContent = t('pause');
     startBtn.classList.remove('primary'); startBtn.classList.add('danger');
   } else {
     if(timerId) clearInterval(timerId); timerId=null;
     if(endAt){ secondsLeft=Math.max(0, Math.round((endAt-Date.now())/1000)); endAt=null; }
     running = false;
-    startBtn.textContent = 'Start';
+    startBtn.textContent = t('start');
     startBtn.classList.remove('danger'); startBtn.classList.add('primary');
   }
 });
 
-resetBtn.addEventListener('click', ()=>{ if(timerId) clearInterval(timerId); timerId=null; running=false; startBtn.textContent='Start'; startBtn.className='primary start bigbtn'; applyPreset(); });
+resetBtn.addEventListener('click', ()=>{ if(timerId) clearInterval(timerId); timerId=null; running=false; startBtn.textContent=t('start'); startBtn.className='primary start bigbtn'; applyPreset(); });
 
 function tick(){
   if(!endAt) return;
@@ -217,13 +354,13 @@ function tick(){
   renderDisplay();
   if(secondsLeft<=0){
     if(timerId) clearInterval(timerId); timerId=null; running=false;
-    startBtn.textContent='Start'; startBtn.classList.remove('danger'); startBtn.classList.add('primary');
+    startBtn.textContent=t('start'); startBtn.classList.remove('danger'); startBtn.classList.add('primary');
     try{ alarm10s(); }catch(_){}
     if(navigator.vibrate) navigator.vibrate([300,150,300,150,300,150,300]);
   }
 }
 
-/* ====== Share (single-line message, space before URL) ====== */
+/* ====== Share (i18n) ====== */
 shareBtn.addEventListener('click', async () => {
   const totalSeconds = parseInt(minutesInput.value || '0') * 60;
   let startedAt; let dur;
@@ -232,30 +369,24 @@ shareBtn.addEventListener('click', async () => {
   const code = b64urlEncode(payload);
   const url = `${location.origin}${location.pathname}#${code}`;
   const mins = Math.max(1, Math.round(totalSeconds/60));
-  const text = `Ti è stato condiviso un Timer per ${mins} minuti relativo alla preparazione di ${dishSel.value}. Clicca per seguire il timer: ${url}`;
+  const text = messages[lang].shareText(mins, dishSel.value, url);
 
   const isSecure = (location.protocol === 'https:') || (location.hostname === 'localhost') || (location.hostname === '127.0.0.1');
   try {
-    if (isSecure && navigator.share) {
-      await navigator.share({ text });
-      return;
-    }
+    if (isSecure && navigator.share) { await navigator.share({ text }); return; }
     throw new Error('Web Share non disponibile');
   } catch(_) {
-    try {
-      await navigator.clipboard.writeText(text);
-      alert('Link copiato negli appunti.');
-    } catch(__) {
+    try { await navigator.clipboard.writeText(text); alert(t('linkCopied')); }
+    catch(__) {
       const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); alert('Copia eseguita.'); } catch(e){ prompt('Copia questo link:', ta.value); }
+      ta.value = text; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); alert(t('copyDone')); } catch(e){ prompt('Copy link:', ta.value); }
       document.body.removeChild(ta);
     }
   }
 });
 
-/* ====== Hash init (ensure audio banner on mobile when opening shared link) ====== */
+/* ====== Hash init (audio banner if needed) ====== */
 function initFromHash() {
   const hash = location.hash?.replace(/^#/, '');
   if (!hash) return;
@@ -283,17 +414,14 @@ function initFromHash() {
   if (timerId) clearInterval(timerId);
   timerId = setInterval(tick, 250);
   running = true;
-  startBtn.textContent = 'Pausa';
+  startBtn.textContent = t('pause');
   startBtn.classList.remove('primary'); startBtn.classList.add('danger');
 
-  // Ensure banner appears on mobile if audio context not yet enabled in this session
   const onMobile = /iPhone|iPad|Android/i.test(navigator.userAgent);
-  if (onMobile && (!audioCtx || needsAudioUnlock())) {
-    injectAudioPrompt();
-  }
+  if (onMobile && (!audioCtx || needsAudioUnlock())) injectAudioPrompt();
 }
 
-/* ====== Settings ====== */
+/* ====== Settings (themes + language) ====== */
 const THEMES_LIST = [
   ['nero','Nero'],['bianco','Bianco'],['celeste','Celeste'],['rosa','Rosa'],['giallo','Giallo'],['indaco','Indaco'],['grigio','Grigio']
 ];
@@ -312,11 +440,25 @@ function buildThemeGrid(){
     themeGrid.appendChild(sw);
   });
 }
-btnSettings.addEventListener('click', ()=>{ buildThemeGrid(); settingsPanel.classList.remove('hidden'); });
+btnSettings.addEventListener('click', ()=>{
+  buildThemeGrid(); 
+  const stored = localStorage.getItem(LANG_KEY) || 'auto';
+  langSel.value = stored;
+  applyTexts();
+  settingsPanel.classList.remove('hidden');
+});
 closeSettings.addEventListener('click', ()=> settingsPanel.classList.add('hidden'));
+langSel.addEventListener('change', ()=>{
+  const val = langSel.value;
+  if (val === 'auto') localStorage.setItem(LANG_KEY, 'auto');
+  else localStorage.setItem(LANG_KEY, val);
+  lang = detectLang();
+  applyTexts();
+});
 window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') settingsPanel.classList.add('hidden'); });
 
 /* ====== Init ====== */
 applyTheme(localStorage.getItem(THEME_KEY) || 'nero');
+applyTexts();
 if (!location.hash) { dishSel.selectedIndex=0; applyPreset(); }
 initFromHash();

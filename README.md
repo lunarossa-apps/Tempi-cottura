@@ -1,10 +1,10 @@
-# Tempi Cottura — V7.4.2 (core)
+# Tempi Cottura — V7.6 (core, 5 lingue + bandiere)
 
-**Fix inclusi**
-- Messaggio di condivisione **su una riga** (senza `\n`), con spazio prima dell’URL.
-- Banner audio **garantito su mobile** quando si apre da link condiviso (se AudioContext non ancora abilitato).
-- **5px** di spazio sopra il bottone **Condividi** per separarlo dal timer.
-- Footer più **piccolo** (11px) e in **unica riga**.
+**Novità**
+- 5 lingue: 🇮🇹 Italiano, 🇬🇧 English, 🇪🇸 Español, 🇵🇹 Português, 🇩🇪 Deutsch
+- Selezione **automatica** dalla lingua del device/browser (fallback EN)
+- **Bandiere** in appbar (selettore rapido) e in **Impostazioni** (chip + select)
+- Resta tutto il resto: link condiviso con hash, banner audio da link, temi, preferiti, Airfryer Standard/Potente (+2 min)
 
-**Resto invariato**
-- Link corto via hash Base64URL; timer sincronizzato; temi e contrasto; preferiti; Airfryer Standard/Potente memor.
+**Deploy**
+- Carica su GitHub Pages. Se vedi cache, apri con `?v=7.6` e aggiorna `CACHE` in `sw.js` ai release successivi.
