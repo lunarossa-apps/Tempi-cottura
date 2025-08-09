@@ -3,20 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1" />
-  <title>Tempi Cottura</title>
+  <title data-i18n="title">Tempi Cottura</title>
   <meta name="theme-color" content="#0b0b0c">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=7.7.6">
+  <link rel="stylesheet" href="style.css?v=7.7.1L">
 </head>
 <body>
   <header class="appbar">
     <button id="btnSettings" class="icon-btn" aria-label="Impostazioni" title="Impostazioni">⚙️</button>
-    <h1>Tempi Cottura</h1>
+    <h1 data-i18n="title">Tempi Cottura</h1>
   </header>
 
   <main class="container">
     <section class="card">
-      <label for="dishSel" class="inline">Piatto</label>
+      <label for="dishSel" class="inline" data-i18n="dish">Piatto</label>
       <select id="dishSel" class="big-select"></select>
     </section>
 
@@ -24,35 +24,35 @@
       <div class="methods two-col">
         <button class="method-card selectable selected" id="cardForno" aria-pressed="true">
           <img src="assets/forno.jpg" alt="Forno tradizionale" onerror="this.style.display='none'">
-          <div class="method-title">Forno</div>
+          <div class="method-title" data-i18n="oven">Forno</div>
         </button>
         <button class="method-card selectable" id="cardAir" aria-pressed="false">
           <img src="assets/airfryer.jpg" alt="Friggitrice ad aria" onerror="this.style.display='none'">
-          <div class="method-title">Airfryer</div>
+          <div class="method-title" data-i18n="air">Airfryer</div>
         </button>
       </div>
 
       <div class="air-row compact" id="airRow" hidden>
-        <label for="airModeSel" class="inline">Modalità</label>
+        <label for="airModeSel" class="inline" data-i18n="mode">Modalità</label>
         <select id="airModeSel" class="compact-select">
-          <option value="potente">Potente</option>
-          <option value="standard">Standard (+2 min)</option>
+          <option value="potente" data-i18n="power">Potente</option>
+          <option value="standard" data-i18n="standard">Standard (+2 min)</option>
         </select>
       </div>
 
       <div id="recipeRow" class="recipe-row">
-        <a id="recipeLink" href="#" target="_blank" rel="noopener" class="recipe-link">🔎 Ricetta (apri ricerca)</a>
+        <a id="recipeLink" href="#" target="_blank" rel="noopener" class="recipe-link" data-i18n="recipe">🔎 Ricetta (apri ricerca)</a>
       </div>
     </section>
 
     <section class="timer card">
       <div class="timer-row">
-        <button id="start" class="primary start bigbtn">Start</button>
+        <button id="start" class="primary start bigbtn" data-i18n="start">Start</button>
         <div id="display" class="timer-display">00:00</div>
-        <button id="reset" class="ghost bigbtn">Reset</button>
+        <button id="reset" class="ghost bigbtn" data-i18n="reset">Reset</button>
       </div>
       <div class="time-row compact center">
-        <label for="minutes" class="inline">Minuti</label>
+        <label for="minutes" class="inline" data-i18n="minutes">Minuti</label>
         <input type="number" id="minutes" min="0" step="1" value="0">
         <button id="minus1" class="ghost smallbtn">-1</button>
         <button id="plus1" class="ghost smallbtn">+1</button>
@@ -61,9 +61,9 @@
         <span class="share-icn" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="18" height="18"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a2.5 2.5 0 000-1.39l7.02-4.11A2.99 2.99 0 0018 7.91a3 3 0 10-3-3c0 .23.03.45.08.66l-7.02 4.11a3 3 0 100 4.64l7.02 4.11c-.05.21-.08.43-.08.66a3 3 0 103-3z" fill="currentColor"/></svg>
         </span>
-        <span id="btnShareText">Condividi timer</span>
+        <span id="btnShareText" data-i18n="shareBtn">Condividi timer</span>
       </button>
-      <div class="muted tiny center" id="shareHint">
+      <div class="muted tiny center" id="shareHint" data-i18n="shareHint">
         Condividendo, chi riceve vedrà il timer partire dal momento dell’invio con i minuti selezionati.
       </div>
     </section>
@@ -73,15 +73,15 @@
   <div id="settingsPanel" class="sheet hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
     <div class="sheet-body">
       <div class="sheet-head">
-        <h2 id="settingsTitle">Impostazioni</h2>
+        <h2 id="settingsTitle" data-i18n="settings">Impostazioni</h2>
         <button id="closeSettings" class="icon-btn" aria-label="Chiudi">✕</button>
       </div>
       <div class="settings-group">
-        <label class="block">Lingua</label>
+        <label class="block" data-i18n="lang">Lingua</label>
         <div id="flagsGrid" class="flags-grid"></div>
       </div>
       <div class="settings-group">
-        <label class="block">Tema colore</label>
+        <label class="block" data-i18n="theme">Tema colore</label>
         <div id="themeGrid" class="theme-grid">
           <button data-theme="nero" class="themechip">Nero</button>
           <button data-theme="bianco" class="themechip">Bianco</button>
@@ -99,7 +99,7 @@
     <small class="tiny">App developed by LunaRossa Ltd — Copyright LunaRossa Ltd London 2025</small>
   </footer>
 
-  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=7.7.6').catch(()=>{});}</script>
-  <script src="app.js?v=7.7.6" defer></script>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js?v=7.7.1L').catch(()=>{});}</script>
+  <script src="app.js?v=7.7.1L" defer></script>
 </body>
 </html>
