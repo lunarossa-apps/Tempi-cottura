@@ -69,7 +69,7 @@ button.share.full{width:100%}
 
 /* Light theme overrides */
 .theme-light .appbar{background:rgba(255,255,255,0.7)}
-.theme-light .big-select, .theme-light .compact-select, .theme-light input[type=number]{background:#ffffff;color:#111827;border-color:#d1d5db}
+.theme-light .big-select, .theme-light .compact-select, .theme-light .compact-select, .theme-light input[type=number]{background:#ffffff;color:#111827;border-color:#d1d5db}
 .theme-light .card{background:#ffffff;border-color:#e5e7eb}
 .theme-light .method-card{background:#ffffff}
 .theme-light .method-title{color:#111827}
