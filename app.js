@@ -1,4 +1,4 @@
-// Tempi Cottura v7.7.4 — stable core + Settings + DDG recipe + share sync (refactored)
+// Tempi Cottura v7.7.5 — stable core + Settings + DDG recipe + share sync (refactored)
 (() => {
   /* ---------- Utilities ---------- */
   const qs = (sel, p=document) => p.querySelector(sel);
@@ -251,6 +251,10 @@
   };
 
   /* ---------- Bootstrap ---------- */
+  // --- Settings safety ---
+  settingsPanel.classList.add('hidden'); // ensure hidden at boot, even if cache served old CSS
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') settingsPanel.classList.add('hidden'); });
+
   setSelected(false);         // default forno
   updateRecipeLink();
   rebuildFlags();
