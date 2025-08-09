@@ -1,7 +1,7 @@
-const CACHE='tc-v7-7-5-core';
+const CACHE='tc-v7-7-6-core';
 self.addEventListener('install',e=>{
   self.skipWaiting();
-  e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./','./index.html','./style.css?v=7.7.5','./app.js?v=7.7.5','./manifest.json'])));
+  e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./','./index.html','./style.css?v=7.7.6','./app.js?v=7.7.6','./manifest.json'])));
 });
 self.addEventListener('activate',e=>{
   e.waitUntil(self.clients.claim());

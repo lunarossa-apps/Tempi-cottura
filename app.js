@@ -1,30 +1,38 @@
-// Tempi Cottura v7.7.5 — stable core + Settings + DDG recipe + share sync (refactored)
+// Tempi Cottura v7.7.6 — stable core + Settings + DDG recipe + share sync (refactored)
 (() => {
   /* ---------- Utilities ---------- */
   const qs = (sel, p=document) => p.querySelector(sel);
   const on = (el, ev, fn) => el.addEventListener(ev, fn);
 
   /* ---------- Language / i18n ---------- */
-  const LANG_KEY='tc-lang';
-  const flags={ it:'🇮🇹', en:'🇬🇧', es:'🇪🇸', pt:'🇵🇹', de:'🇩🇪' };
-  const ddgKl = { it:'it-it', en:'us-en', es:'es-es', pt:'pt-pt', de:'de-de' };
-  const methodWords = {
-    it:{ forno:'forno', airfryer:'friggitrice ad aria' },
-    en:{ forno:'oven', airfryer:'air fryer' },
-    es:{ forno:'horno', airfryer:'freidora de aire' },
-    pt:{ forno:'forno', airfryer:'airfryer' },
-    de:{ forno:'Backofen', airfryer:'Heißluftfritteuse' }
-  };
-  const recipeWord = { it:'ricetta', en:'recipe', es:'receta', pt:'receita', de:'rezept' };
-
-  const detectLang = () => {
-    const pref = localStorage.getItem(LANG_KEY);
-    if (pref) return pref;
-    return (navigator.language||'en').toLowerCase().slice(0,2);
-  };
-  let lang = ['it','en','es','pt','de'].includes(detectLang()) ? detectLang() : 'en';
-
-  /* ---------- Theme ---------- */
+const LANG_KEY='tc-lang';
+const LANGS=['it','en','es','pt','de'];
+const flags={ it:'🇮🇹', en:'🇬🇧', es:'🇪🇸', pt:'🇵🇹', de:'🇩🇪' };
+const ddgKl = { it:'it-it', en:'us-en', es:'es-es', pt:'pt-pt', de:'de-de' };
+const methodWords = {
+  it:{ forno:'forno', airfryer:'friggitrice ad aria' },
+  en:{ forno:'oven', airfryer:'air fryer' },
+  es:{ forno:'horno', airfryer:'freidora de aire' },
+  pt:{ forno:'forno', airfryer:'airfryer' },
+  de:{ forno:'Backofen', airfryer:'Heißluftfritteuse' }
+};
+const recipeWord = { it:'ricetta', en:'recipe', es:'receta', pt:'receita', de:'rezept' };
+const messages = {
+  it:{ share:(m,d,u)=>`Ti è stato condiviso un Timer per ${m} minuti relativo alla preparazione di ${d}. Clicca per seguire il timer: ${u}` },
+  en:{ share:(m,d,u)=>`A ${m}-minute timer was shared for ${d}. Tap to follow it: ${u}` },
+  es:{ share:(m,d,u)=>`Se compartió un temporizador de ${m} minutos para ${d}. Pulsa para seguirlo: ${u}` },
+  pt:{ share:(m,d,u)=>`Foi partilhado um temporizador de ${m} minutos para ${d}. Toque para seguir: ${u}` },
+  de:{ share:(m,d,u)=>`Ein ${m}-Minuten-Timer für ${d} wurde geteilt. Tippe zum Folgen: ${u}` }
+};
+function detectLang(){
+  const stored = localStorage.getItem(LANG_KEY);
+  if (stored && LANGS.includes(stored)) return stored;
+  const n = (navigator.language||'en').toLowerCase();
+  const guess = n.startsWith('it')?'it': n.startsWith('es')?'es': n.startsWith('pt')?'pt': n.startsWith('de')?'de':'en';
+  return guess;
+}
+let lang = detectLang();
+/* ---------- Theme ---------- */
   const THEME_KEY='tc-theme';
   const THEMES={
     nero:{bg:'#0b0b0c',card:'#151518',fg:'#f9fafb',muted:'#9ca3af',border:'#26262a',primary:'#22c55e',danger:'#ef4444',btnText:'#0b0b0c',icon:'#9ca3af'},
@@ -197,7 +205,7 @@
     const payload = { dishId:S.dish, dish:LABELS[S.dish], method:S.method, mode:(S.method==='airfryer'? S.airMode:''), start:startedAt, dur: totalSeconds };
     const url = `${location.origin}${location.pathname}#${b64enc(payload)}`;
     const mins = Math.max(1, Math.round(totalSeconds/60));
-    const text = `Ti è stato condiviso un Timer per ${mins} minuti relativo alla preparazione di ${LABELS[S.dish]}. Clicca per seguire il timer: ${url}`;
+    const text = (messages[lang]||messages.en).share(mins, LABELS[S.dish], url);
     const isSecure = (location.protocol==='https:')||(location.hostname==='localhost')||(location.hostname==='127.0.0.1');
     try{ if(isSecure && navigator.share){ await navigator.share({text}); return; } throw 0; }
     catch{ try{ await navigator.clipboard.writeText(text); alert('Link copiato negli appunti'); }
@@ -241,7 +249,7 @@
 
   const rebuildFlags = () => {
     flagsGrid.innerHTML='';
-    ['it','en','es','pt','de'].forEach(code=>{
+    LANGS.forEach(code=>{
       const b=document.createElement('button');
       b.className = 'flagchip' + (code===lang?' active':'');
       b.innerHTML = `<span>${flags[code]}</span><span>${code.toUpperCase()}</span>`;
@@ -250,7 +258,7 @@
     });
   };
 
-  /* ---------- Bootstrap ---------- */
+/* ---------- Bootstrap ---------- */
   // --- Settings safety ---
   settingsPanel.classList.add('hidden'); // ensure hidden at boot, even if cache served old CSS
   document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') settingsPanel.classList.add('hidden'); });
