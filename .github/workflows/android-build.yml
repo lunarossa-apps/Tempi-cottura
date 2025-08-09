@@ -1,0 +1,52 @@
+name: Android Build (Capacitor)
+on:
+  workflow_dispatch:
+  push:
+    branches: [ mobile/capacitor ]
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Capacitor init (idempotent)
+        run: |
+          npx cap init TempiCottura com.lunarossa.tempicottura --web-dir=. || true
+
+      - name: Add Android platform if missing
+        run: |
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
+
+      - name: Sync web into Android project
+        run: npm run cap:sync
+
+      - name: Build Debug APK (for sideload testing)
+        run: npm run build:android:debug
+
+      - name: Build Release AAB (unsigned)
+        run: npm run build:android:release
+
+      - name: Upload APK artifact (debug)
+        uses: actions/upload-artifact@v4
+        with:
+          name: TempiCottura-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Upload AAB artifact (release unsigned)
+        uses: actions/upload-artifact@v4
+        with:
+          name: TempiCottura-release-aab-UNSIGNED
+          path: android/app/build/outputs/bundle/release/app-release.aab
