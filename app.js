@@ -1,4 +1,4 @@
-// Tempi Cottura v7.7.3 — stable core + Settings + DDG recipe + share sync (refactored)
+// Tempi Cottura v7.7.4 — stable core + Settings + DDG recipe + share sync (refactored)
 (() => {
   /* ---------- Utilities ---------- */
   const qs = (sel, p=document) => p.querySelector(sel);
