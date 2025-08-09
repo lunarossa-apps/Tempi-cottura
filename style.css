@@ -52,3 +52,7 @@ button.share.full{width:100%}
 .flags-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
 .flagchip{display:flex;gap:6px;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--fg);padding:8px}
 .flagchip.active{outline:2px solid var(--green)}
+
+.themechip{display:flex;align-items:center;gap:8px; justify-content:center; cursor:pointer}
+.themechip .swatch{width:14px;height:14px;border-radius:50%;border:1px solid var(--border)}
+.theme-label{font-weight:600}

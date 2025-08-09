@@ -38,6 +38,34 @@
   const THEME_KEY='tc-theme'; const THEMES={nero:{bg:'#0b0b0c',card:'#151518',fg:'#f9fafb',muted:'#9ca3af',border:'#26262a',primary:'#22c55e',danger:'#ef4444',btnText:'#0b0b0c',icon:'#9ca3af'},bianco:{bg:'#f8fafc',card:'#ffffff',fg:'#111827',muted:'#475569',border:'#e5e7eb',primary:'#16a34a',danger:'#dc2626',btnText:'#111827',icon:'#6b7280'},celeste:{bg:'#e0f2fe',card:'#ffffff',fg:'#0b0b0c',muted:'#334155',border:'#bae6fd',primary:'#0ea5e9',danger:'#dc2626',btnText:'#111827',icon:'#374151'},rosa:{bg:'#ffe4e6',card:'#ffffff',fg:'#0b0b0c',muted:'#334155',border:'#fecdd3',primary:'#f43f5e',danger:'#b91c1c',btnText:'#111827',icon:'#374151'},giallo:{bg:'#fef9c3',card:'#ffffff',fg:'#0b0b0c',muted:'#334155',border:'#fef08a',primary:'#f59e0b',danger:'#b91c1c',btnText:'#111827',icon:'#374151'},indaco:{bg:'#312e81',card:'#3730a3',fg:'#e0e7ff',muted:'#a5b4fc',border:'#4338ca',primary:'#22c55e',danger:'#ef4444',btnText:'#0b0b0c',icon:'#cbd5e1'},grigio:{bg:'#111827',card:'#1f2937',fg:'#f9fafb',muted:'#9ca3af',border:'#374151',primary:'#22c55e',danger:'#ef4444',btnText:'#0b0b0c',icon:'#9ca3af'}};
   const applyTheme=(name)=>{const t=THEMES[name]||THEMES.nero,r=document.documentElement; r.style.setProperty('--bg',t.bg); r.style.setProperty('--card',t.card); r.style.setProperty('--fg',t.fg); r.style.setProperty('--muted',t.muted); r.style.setProperty('--border',t.border); r.style.setProperty('--primary',t.primary); r.style.setProperty('--danger',t.danger); r.style.setProperty('--btnText',t.btnText); r.style.setProperty('--icon',t.icon); localStorage.setItem(THEME_KEY,name);};
   applyTheme(localStorage.getItem(THEME_KEY)||'nero');
+  /* Theme names localized */
+  const THEME_NAMES = {
+    it:{nero:'Nero', bianco:'Bianco', celeste:'Celeste', rosa:'Rosa', giallo:'Giallo', indaco:'Indaco', grigio:'Grigio'},
+    en:{nero:'Black', bianco:'White', celeste:'Light Blue', rosa:'Pink', giallo:'Yellow', indaco:'Indigo', grigio:'Grey'},
+    es:{nero:'Negro', bianco:'Blanco', celeste:'Celeste', rosa:'Rosa', giallo:'Amarillo', indaco:'Índigo', grigio:'Gris'},
+    pt:{nero:'Preto', bianco:'Branco', celeste:'Azul claro', rosa:'Rosa', giallo:'Amarelo', indaco:'Índigo', grigio:'Cinzento'},
+    de:{nero:'Schwarz', bianco:'Weiß', celeste:'Hellblau', rosa:'Rosa', giallo:'Gelb', indaco:'Indigo', grigio:'Grau'}
+  };
+
+  const rebuildThemeChips = () => {
+    const names = THEME_NAMES[lang] || THEME_NAMES.en;
+    const order = ['nero','bianco','celeste','rosa','giallo','indaco','grigio'];
+    themeGrid.innerHTML = '';
+    order.forEach(key => {
+      const t = THEMES[key];
+      const b = document.createElement('button');
+      b.className = 'themechip';
+      b.dataset.theme = key;
+      // Visualize theme colors on the chip
+      b.style.background = t.card;
+      b.style.color = t.fg;
+      b.style.borderColor = t.border;
+      b.innerHTML = `<span class="swatch" style="background:${t.primary}; border-color:${t.border}"></span><span class="theme-label">${names[key]||key}</span>`;
+      b.addEventListener('click', () => applyTheme(key));
+      themeGrid.appendChild(b);
+    });
+  };
+
 
   /* State */
   const S={method:'forno', airMode:localStorage.getItem('tc-air-mode')||'potente', dish:DISH_IDS[0], running:false, timer:null, endAt:null, seconds:0};
@@ -104,12 +132,12 @@
   };
 
   // Settings
-  const rebuildFlags=()=>{ flagsGrid.innerHTML=''; LANGS.forEach(code=>{ const b=document.createElement('button'); b.className='flagchip'+(code===lang?' active':''); b.innerHTML=`<span>${flags[code]}</span><span>${code.toUpperCase()}</span>`; b.addEventListener('click',()=>{ lang=code; localStorage.setItem(LANG_KEY,code); applyTexts(); populateDishes(); updateRecipeLink(); rebuildFlags(); }); flagsGrid.appendChild(b); }); };
+  const rebuildFlags=()=>{ flagsGrid.innerHTML=''; LANGS.forEach(code=>{ const b=document.createElement('button'); b.className='flagchip'+(code===lang?' active':''); b.innerHTML=`<span>${flags[code]}</span><span>${code.toUpperCase()}</span>`; b.addEventListener('click',()=>{ lang=code; localStorage.setItem(LANG_KEY,code); applyTexts(); populateDishes(); updateRecipeLink(); rebuildFlags(); rebuildThemeChips(); }); flagsGrid.appendChild(b); }); };
   on(btnSettings,'click',()=>settingsPanel.classList.remove('hidden'));
   on(closeSettings,'click',()=>settingsPanel.classList.add('hidden'));
   on(settingsPanel,'click',e=>{ if(e.target===settingsPanel) settingsPanel.classList.add('hidden'); });
   on(themeGrid,'click',e=>{ const b=e.target.closest('button[data-theme]'); if(!b) return; applyTheme(b.dataset.theme); });
 
   // Boot
-  settingsPanel.classList.add('hidden'); populateDishes(); applyTexts(); setSelected(false); updateRecipeLink(); rebuildFlags(); initFromHash();
+  settingsPanel.classList.add('hidden'); populateDishes(); applyTexts(); setSelected(false); updateRecipeLink(); rebuildFlags(); rebuildThemeChips(); initFromHash();
 })();
