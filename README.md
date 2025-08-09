@@ -1,10 +1,9 @@
-# Tempi Cottura — V7.6 (core, 5 lingue + bandiere)
+# Tempi Cottura — V7.9 (DuckDuckGo + hint condivisione + layout fisso)
 
 **Novità**
-- 5 lingue: 🇮🇹 Italiano, 🇬🇧 English, 🇪🇸 Español, 🇵🇹 Português, 🇩🇪 Deutsch
-- Selezione **automatica** dalla lingua del device/browser (fallback EN)
-- **Bandiere** in appbar (selettore rapido) e in **Impostazioni** (chip + select)
-- Resta tutto il resto: link condiviso con hash, banner audio da link, temi, preferiti, Airfryer Standard/Potente (+2 min)
+- Link Ricetta su **DuckDuckGo** con query in lingua e metodo (Forno/Airfryer).
+- Testo esplicativo sotto il pulsante **Condividi** (timer già avviato, minuti visibili).
+- Layout **non scrollabile** e dimensioni fisse rispetto allo schermo del device.
 
 **Deploy**
-- Carica su GitHub Pages. Se vedi cache, apri con `?v=7.6` e aggiorna `CACHE` in `sw.js` ai release successivi.
+- Carica su GitHub Pages e apri con `?v=7.9` per evitare cache vecchie (aggiorna `CACHE` in `sw.js` per hotfix).

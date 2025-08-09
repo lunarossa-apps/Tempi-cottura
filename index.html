@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1" />
   <title>Tempi Cottura</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=7.6" />
+  <link rel="stylesheet" href="style.css?v=7.9" />
   <meta name="theme-color" content="#0b0b0c">
 </head>
 <body>
   <header class="appbar">
     <button id="btnSettings" class="icon-btn" aria-label="Settings" title="Settings">
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" class="icon">
-        <path d="M12 8.6a3.4 3.4 0 100 6.8 3.4 3.4 0 000-6.8zm9.4 3.4c0-.5 0-1-.1-1.5l2-1.6a.8.8 0 00.2-1l-2-3.5a.8.8 0 00-1-.3l-2.4 1a8.7 8.7 0 00-2.6-1.5l-.4-2.6a.8.8 0 00-.8-.7h-4a.8.8 0 00-.8.7l-.4 2.6a8.7 8.7 0 00-2.6 1.5l-2.4-1a.8.8 0 00-1 .3l-2 3.5a.8.8 0 00.2 1l2 1.6c0 .5-.1 1-.1 1.5s0 1 .1 1.5l-2 1.6a.8.8 0 00-.2 1l2 3.5a.8.8 0 001 .3l2.4-1c.8.6 1.7 1.1 2.6 1.5l.4 2.6a.8.8 0 00.8.7h4a.8.8 0 00.8-.7l.4-2.6a8.7 8.7 0 002.6-1.5l2.4 1a.8.8 0 001-.3l2-3.5a.8.8 0 00-.2-1l-2-1.6c.1-.5.1-1 .1-1.5z" fill="currentColor"/>
+        <path d="M12 8.6a3.4 3.4 0 100 6.8 3.4 3.4 0 000-6.8zm9.4 3.4c0-.5 0-1-.1-1.5l2-1.6a.8.8 0 00.2-1l-2-3.5a.8.8 0 00-1-.3l-2.4 1a8.7 8.7 0 00-2.6-1.5l-.4-2.6a.8.8 0 00-.8-.7h-4a.8.8 0 00-.8.7l-.4 2.6a8.7 8.7 0 00-2.6 1.5l-2.4-1a.8.8 0 00-1 .3l-2 3.5a.8.8 0 00.2 1l2 1.6c0 .5-.1 1-.1 1.5s0 1 .1 1.5l-2 1.6a.8.8 0 00-.2 1l2 3.5a.8.8 0 001 .3l2.4 1a8.7 8.7 0 002.6 1.5l.4 2.6a.8.8 0 00.8.7h4a.8.8 0 00.8-.7l.4-2.6a8.7 8.7 0 002.6-1.5l2.4 1a.8.8 0 001-.3l2-3.5a.8.8 0 00-.2-1l-2-1.6c.1-.5.1-1 .1-1.5z" fill="currentColor"/>
       </svg>
     </button>
     <h1 id="appTitle">Tempi Cottura</h1>
@@ -50,6 +50,9 @@
           <option value="standard" id="optStandard">Standard (+2 min)</option>
         </select>
       </div>
+      <div id="recipeRow" class="recipe-row">
+        <a id="recipeLink" href="#" target="_blank" rel="noopener" class="recipe-link">🔎 Ricetta (apri ricerca)</a>
+      </div>
     </section>
 
     <section class="timer card tight">
@@ -64,6 +67,7 @@
         <button id="minus1" class="ghost smallbtn">-1</button>
         <button id="plus1" class="ghost smallbtn">+1</button>
       </div>
+      <div class="muted tiny center" id="shareHint">Condividendo, chi riceve vedrà il timer già avviato con i minuti selezionati.</div>
       <button id="share" class="share full">
         <span class="share-icn" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="18" height="18"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a2.5 2.5 0 000-1.39l7.02-4.11A2.99 2.99 0 0018 7.91a3 3 0 10-3-3c0 .23.03.45.08.66l-7.02 4.11a3 3 0 100 4.64l7.02 4.11c-.05.21-.08.43-.08.66a3 3 0 103-3z" fill="currentColor"/></svg>
@@ -73,44 +77,13 @@
     </section>
   </main>
 
-  <!-- Settings -->
-  <div id="settingsPanel" class="settings hidden" role="dialog" aria-labelledby="settingsTitle">
-    <div class="settings-header">
-      <h2 id="settingsTitle">Impostazioni</h2>
-      <button id="closeSettings" class="icon-btn" aria-label="Close">
-        <svg viewBox="0 0 24 24" width="18" height="18" class="icon"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-      </button>
-    </div>
-    <div class="settings-body">
-      <div class="setting-row">
-        <label id="lblTheme">Tema colore</label>
-        <div class="theme-grid" id="themeGrid"></div>
-      </div>
-      <div class="setting-row">
-        <label id="lblLanguage">Lingua</label>
-        <select id="langSel" class="compact-select">
-          <option value="auto">Auto (device)</option>
-          <option value="it">Italiano 🇮🇹</option>
-          <option value="en">English 🇬🇧</option>
-          <option value="es">Español 🇪🇸</option>
-          <option value="pt">Português 🇵🇹</option>
-          <option value="de">Deutsch 🇩🇪</option>
-        </select>
-      </div>
-      <div class="setting-row">
-        <label id="lblQuickFlags">Selettore rapido</label>
-        <div class="flags-grid" id="flagsGrid"></div>
-      </div>
-    </div>
-  </div>
-
   <footer class="footer compact">
     <small class="tiny" id="footerText">App developed by LunaRossa Ltd — Copyright LunaRossa Ltd London 2025</small>
   </footer>
 
   <script>
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=7.6').catch(()=>{}); }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=7.9').catch(()=>{}); }
   </script>
-  <script src="app.js?v=7.6"></script>
+  <script src="app.js?v=7.9"></script>
 </body>
 </html>
