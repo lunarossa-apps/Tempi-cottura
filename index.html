@@ -4,63 +4,54 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1" />
   <title>Tempi Cottura</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css?v=7.7" />
   <meta name="theme-color" content="#0b0b0c">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css?v=7.7.1">
 </head>
 <body>
   <header class="appbar">
-    <button id="btnSettings" class="icon-btn" aria-label="Settings" title="Settings">
-      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" class="icon">
-        <path d="M12 8.6a3.4 3.4 0 100 6.8 3.4 3.4 0 000-6.8zm9.4 3.4c0-.5 0-1-.1-1.5l2-1.6a.8.8 0 00.2-1l-2-3.5a.8.8 0 00-1-.3l-2.4 1a8.7 8.7 0 00-2.6-1.5l-.4-2.6a.8.8 0 00-.8-.7h-4a.8.8 0 00-.8.7l-.4 2.6a8.7 8.7 0 00-2.6 1.5l-2.4-1a.8.8 0 00-1 .3l-2 3.5a.8.8 0 00.2 1l2 1.6c0 .5-.1 1-.1 1.5s0 1 .1 1.5l-2 1.6a.8.8 0 00-.2 1l2 3.5a.8.8 0 001 .3l2.4-1c.8.6 1.7 1.1 2.6 1.5l.4 2.6a.8.8 0 00.8.7h4a.8.8 0 00.8-.7l.4-2.6a8.7 8.7 0 002.6-1.5l2.4 1a.8.8 0 001-.3l2-3.5a.8.8 0 00-.2-1l-2-1.6c.1-.5.1-1 .1-1.5z" fill="currentColor"/>
-      </svg>
-    </button>
-    <h1 id="appTitle">Tempi Cottura</h1>
-    <div class="flagbar" id="flagBar" aria-label="Language quick selector"></div>
+    <h1>Tempi Cottura</h1>
   </header>
 
   <main class="container">
-    <section class="card tight">
-      <label for="dishSel" class="inline" id="lblDish">Piatto</label>
+    <section class="card">
+      <label for="dishSel" class="inline">Piatto</label>
       <select id="dishSel" class="big-select"></select>
-      <div class="muted small" id="hintSelect">Seleziona un piatto e poi scegli il metodo di cottura.</div>
     </section>
 
-    <section class="card tight">
+    <section class="card">
       <div class="methods two-col">
-        <div class="method-card selectable" id="cardForno" tabindex="0" role="button" aria-pressed="false">
-          <img src="assets/forno.jpg" alt="Forno tradizionale">
-          <button class="fav" id="favForno" title="Favorite oven" aria-label="Favorite oven">
-            <svg viewBox="0 0 24 24" width="22" height="22" class="star"><path d="M12 17.27l6.18 3.73-1.64-7.03L21 9.24l-7.19-.61L12 2 10.19 8.63 3 9.24l4.46 4.73L5.82 21z"/></svg>
-          </button>
-          <div class="method-title" id="lblOven">Forno</div>
+        <div class="method-card selectable selected" id="cardForno" tabindex="0" role="button" aria-pressed="true">
+          <img src="assets/forno.jpg" alt="Forno tradizionale" onerror="this.style.display='none'">
+          <div class="method-title">Forno</div>
         </div>
         <div class="method-card selectable" id="cardAir" tabindex="0" role="button" aria-pressed="false">
-          <img src="assets/airfryer.jpg" alt="Friggitrice ad aria">
-          <button class="fav" id="favAir" title="Favorite airfryer" aria-label="Favorite airfryer">
-            <svg viewBox="0 0 24 24" width="22" height="22" class="star"><path d="M12 17.27l6.18 3.73-1.64-7.03L21 9.24l-7.19-.61L12 2 10.19 8.63 3 9.24l4.46 4.73L5.82 21z"/></svg>
-          </button>
-          <div class="method-title" id="lblAir">Airfryer</div>
+          <img src="assets/airfryer.jpg" alt="Friggitrice ad aria" onerror="this.style.display='none'">
+          <div class="method-title">Airfryer</div>
         </div>
       </div>
-      <div class="air-row compact" id="airRow">
-        <label for="airModeSel" class="inline" id="lblMode">Modalità</label>
+      <div class="air-row compact" id="airRow" style="display:none">
+        <label for="airModeSel" class="inline">Modalità</label>
         <select id="airModeSel" class="compact-select">
-          <option value="potente" id="optPower">Potente</option>
-          <option value="standard" id="optStandard">Standard (+2 min)</option>
+          <option value="potente">Potente</option>
+          <option value="standard">Standard (+2 min)</option>
         </select>
+      </div>
+
+      <div id="recipeRow" class="recipe-row">
+        <a id="recipeLink" href="#" target="_blank" rel="noopener" class="recipe-link">🔎 Ricetta (apri ricerca)</a>
       </div>
     </section>
 
-    <section class="timer card tight">
+    <section class="timer card">
       <div class="timer-row">
         <button id="start" class="primary start bigbtn">Start</button>
         <div id="display" class="timer-display">00:00</div>
         <button id="reset" class="ghost bigbtn">Reset</button>
       </div>
       <div class="time-row compact center">
-        <label for="minutes" class="inline" id="lblMinutes">Minuti</label>
-        <input type="number" id="minutes" min="0" step="1">
+        <label for="minutes" class="inline">Minuti</label>
+        <input type="number" id="minutes" min="0" step="1" value="0">
         <button id="minus1" class="ghost smallbtn">-1</button>
         <button id="plus1" class="ghost smallbtn">+1</button>
       </div>
@@ -70,47 +61,19 @@
         </span>
         <span id="btnShareText">Condividi timer</span>
       </button>
+      <div class="muted tiny center" id="shareHint">
+        Condividendo, chi riceve vedrà il timer partire dal momento dell’invio con i minuti selezionati.
+      </div>
     </section>
   </main>
 
-  <!-- Settings -->
-  <div id="settingsPanel" class="settings hidden" role="dialog" aria-labelledby="settingsTitle">
-    <div class="settings-header">
-      <h2 id="settingsTitle">Impostazioni</h2>
-      <button id="closeSettings" class="icon-btn" aria-label="Close">
-        <svg viewBox="0 0 24 24" width="18" height="18" class="icon"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-      </button>
-    </div>
-    <div class="settings-body">
-      <div class="setting-row">
-        <label id="lblTheme">Tema colore</label>
-        <div class="theme-grid" id="themeGrid"></div>
-      </div>
-      <div class="setting-row">
-        <label id="lblLanguage">Lingua</label>
-        <select id="langSel" class="compact-select">
-          <option value="auto">Auto (device)</option>
-          <option value="it">Italiano 🇮🇹</option>
-          <option value="en">English 🇬🇧</option>
-          <option value="es">Español 🇪🇸</option>
-          <option value="pt">Português 🇵🇹</option>
-          <option value="de">Deutsch 🇩🇪</option>
-        </select>
-      </div>
-      <div class="setting-row">
-        <label id="lblQuickFlags">Selettore rapido</label>
-        <div class="flags-grid" id="flagsGrid"></div>
-      </div>
-    </div>
-  </div>
-
   <footer class="footer compact">
-    <small class="tiny" id="footerText">App developed by LunaRossa Ltd — Copyright LunaRossa Ltd London 2025</small>
+    <small class="tiny">App developed by LunaRossa Ltd — Copyright LunaRossa Ltd London 2025</small>
   </footer>
 
   <script>
-    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=7.7').catch(()=>{}); }
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js?v=7.7.1').catch(()=>{}); }
   </script>
-  <script src="app.js?v=7.7"></script>
+  <script src="app.js?v=7.7.1"></script>
 </body>
 </html>
